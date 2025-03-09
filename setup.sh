@@ -71,11 +71,11 @@ fi
 
 # Backup .p10k.zsh
 if [ -f "$HOME/.p10k.zsh" ]; then
-  echo "Backing up p10k.zsh..."
+  echo "Backing up .p10k.zsh..."
   cp "$HOME/.p10k.zsh" "$HOME/.p10k.zsh.backup_$(date +%s)"
 fi
 
-# Link .p10k.zsh config folder
+# Link .p10k.zsh
 echo "Linking .p10k.zsh..."
 ln -sf "$(pwd)/.p10k.zsh" "$HOME/.p10k.zsh"
 
@@ -84,6 +84,33 @@ if ! command -v tmux &> /dev/null; then
   echo "Installing Tmux..."
   brew install tmux
 fi
+
+# Backup .tmux.conf
+if [ -f "$HOME/.tmux.conf" ]; then
+  echo "Backing up .tmux.conf..."
+  cp "$HOME/.tmux.conf" "$HOME/.tmux.conf.backup_$(date +%s)"
+fi
+
+# Link .tmux.conf
+echo "Linking .tmux.conf..."
+ln -sf "$(pwd)/.tmux.conf" "$HOME/.tmux.conf"
+
+# tpm (Tmux Plugin Manager)
+if ! command -v tmux &> /dev/null; then
+  echo "Installing Tmux..."
+  brew install tmux
+fi
+
+# Backup tpm config folder
+TPM_CONFIG_DIR="$HOME/.tmux"
+if [ -d "$TPM_CONFIG_DIR" ]; then
+  echo "Backing up tpm config folder..."
+  mv "$TPM_CONFIG_DIR" "${TPM_CONFIG_DIR}_backup_$(date +%s)"
+fi
+
+# Link tpm config folder
+echo "Linking tpm config folder..."
+ln -s "$(pwd)/.tmux" "$TPM_CONFIG_DIR"
 
 # Neovim
 if ! command -v nvim &> /dev/null; then
@@ -138,8 +165,6 @@ fi
 
 echo "Development environment setup complete."
 
-# Tmux
-# Tmux config file
-# TPM (Tmux Plugin Manager)
-# Tmux Dracula
+# Poetry
 # Docker
+# New TS project script
