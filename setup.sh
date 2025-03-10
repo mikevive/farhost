@@ -64,6 +64,12 @@ if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/fast-syntax-highlighti
   git clone https://github.com/zdharma-continuum/fast-syntax-highlighting.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/fast-syntax-highlighting
 fi
 
+# Zsh pyautoenv plugin
+if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/pyautoenv" ]; then
+  echo "Installing pyautoenv plugin"
+  git clone https://github.com/hsaunders1904/pyautoenv.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/pyautoenv
+fi
+
 # Powerlevel10k
 if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k" ]; then
   git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
@@ -156,6 +162,14 @@ if ! brew list | grep -q "pyenv-virtualenv"; then
   brew install pyenv-virtualenv
 fi
 
+# Poetry
+if ! brew list | grep -q "poetry"; then
+  echo "Installing Poetry..."
+  brew install poetry
+  # use pyenv local env
+  poetry config virtualenvs.in-project true
+fi
+
 # Python
 LATEST_PYTHON=$(pyenv install --list | grep -E "^\s*[0-9]+\.[0-9]+\.[0-9]+$" | tail -1 | tr -d ' ')
 if ! pyenv versions | grep -q "$LATEST_PYTHON"; then
@@ -163,8 +177,16 @@ if ! pyenv versions | grep -q "$LATEST_PYTHON"; then
   pyenv install "$LATEST_PYTHON"
 fi
 
+# Docker
+if ! brew list | grep -q "docker"; then
+  echo "Installing Docker..."
+  brew install --cask docker
+fi
+
 echo "Development environment setup complete."
 
-# Poetry
-# Docker
 # New TS project script
+# Raycast
+# 1P
+# moom
+# alt-tab
