@@ -104,7 +104,7 @@ source $ZSH/oh-my-zsh.sh
 # Custom variables
 export PROJECTS="$HOME/Documents/mikevive/projects/"
 export DOCS="$HOME/Documents/mikevive/docs/"
-export FARHOST="$PROJECTS/farhost/"
+export FARHOST="$HOME/.farhost/"
 
 # Custom aliases
 alias zshrc="nvim $HOME/.zshrc"

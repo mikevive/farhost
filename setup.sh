@@ -1,6 +1,12 @@
 #!bin/bash
 set -e
 
+# Farhost
+if [ ! -d "$HOME/.farhost" ]; then
+  echo "Installing Farshost..."
+  git clone https://github.com/mikevive/farhost.git "$HOME/.farhost"
+fi
+
 # Backup .zshrc
 if [ -f "$HOME/.zshrc" ]; then
   echo "Backing up .zshrc..."
@@ -42,31 +48,31 @@ fi
 
 # Zsh Autosuggestion plugin
 if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions" ]; then
-  echo "Installing zsh-autosuggestions plugin"
+  echo "Installing zsh-autosuggestions plugin..."
   git clone https://github.com/zsh-users/zsh-autosuggestions.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
 fi
 
 # Zsh Syntax Highlighting plugin
 if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting" ]; then
-  echo "Installing zsh-autosuggestions plugin"
+  echo "Installing zsh-autosuggestions plugin..."
   git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 fi
 
 # Zsh Autocomplete plugin
 if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autocomplete" ]; then
-  echo "Installing zsh-autocomplete plugin"
+  echo "Installing zsh-autocomplete plugin..."
   git clone https://github.com/marlonrichert/zsh-autocomplete.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autocomplete
 fi
 
 # Zsh Fast Syntax Highlighting plugin
 if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/fast-syntax-highlighting" ]; then
-  echo "Installing fast-syntax-highlighting plugin"
+  echo "Installing fast-syntax-highlighting plugin..."
   git clone https://github.com/zdharma-continuum/fast-syntax-highlighting.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/fast-syntax-highlighting
 fi
 
 # Zsh pyautoenv plugin
 if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/pyautoenv" ]; then
-  echo "Installing pyautoenv plugin"
+  echo "Installing pyautoenv plugin..."
   git clone https://github.com/hsaunders1904/pyautoenv.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/pyautoenv
 fi
 
