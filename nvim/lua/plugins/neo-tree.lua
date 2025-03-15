@@ -38,12 +38,18 @@ return {
 					hide_gitignored = true,
 				},
 			},
+			window = {
+				position = "float",
+				popup = {
+					size = { height = "100%", width = "100%" },
+					position = "50%",
+				},
+			},
 			event_handlers = {
 				{ event = "file_renamed", handler = file_renamed_handler },
 				{ event = "file_moved", handler = file_renamed_handler },
 			},
 		})
-		vim.keymap.set("n", "<C-p>", ":Neotree toggle reveal filesystem left<CR>", {})
-		vim.keymap.set("n", "<C-e>", ":Neotree reveal filesystem left<CR>", {})
+		vim.keymap.set("n", "<C-p>", ":Neotree toggle reveal<CR>", {})
 	end,
 }
