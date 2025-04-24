@@ -163,9 +163,9 @@ if ! brew list | grep -q "uv"; then
 fi
 
 # Podman
-if ! brew list | grep -q "podman"; then
+if ! brew list | grep -q "podman-desktop"; then
   echo "Installing Podman..."
-  brew install --cask podman
+  brew install --cask podman-desktop
 fi
 
 echo "Development environment setup complete."
