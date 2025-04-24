@@ -156,37 +156,16 @@ if ! command -v node &> /dev/null; then
   nvm install node
 fi
 
-# Pyenv
-if ! command -v pyenv &> /dev/null; then
-  echo "Installing pyenv..."
-  brew install pyenv
+# UV
+if ! brew list | grep -q "uv"; then
+  echo "Installing UV..."
+  brew install uv
 fi
 
-# Pyenv Virtualenv Plugin
-if ! brew list | grep -q "pyenv-virtualenv"; then
-  echo "Installing pyenv-virtualenv plugin..."
-  brew install pyenv-virtualenv
-fi
-
-# Poetry
-if ! brew list | grep -q "poetry"; then
-  echo "Installing Poetry..."
-  brew install poetry
-  # use pyenv local env
-  poetry config virtualenvs.in-project true
-fi
-
-# Python
-LATEST_PYTHON=$(pyenv install --list | grep -E "^\s*[0-9]+\.[0-9]+\.[0-9]+$" | tail -1 | tr -d ' ')
-if ! pyenv versions | grep -q "$LATEST_PYTHON"; then
-  echo "Installing Python $LATEST_PYTHON..."
-  pyenv install "$LATEST_PYTHON"
-fi
-
-# Docker
-if ! brew list | grep -q "docker"; then
-  echo "Installing Docker..."
-  brew install --cask docker
+# Podman
+if ! brew list | grep -q "podman"; then
+  echo "Installing Podman..."
+  brew install --cask podman
 fi
 
 echo "Development environment setup complete."

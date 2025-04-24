@@ -110,7 +110,7 @@ export FARHOST="$HOME/.farhost/"
 alias zshrc="nvim $HOME/.zshrc"
 alias projects="cd $PROJECTS"
 alias docs="cd $DOCS"
-alias farhost="nvim $FARHOST"
+alias farhost="cd $FARHOST"
 
 # Pyenv
 export PATH="$HOME/.pyenv/bin:$PATH"
