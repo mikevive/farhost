@@ -103,12 +103,14 @@ source $ZSH/oh-my-zsh.sh
 
 # Custom variables
 export PROJECTS="$HOME/Documents/mikevive/projects/"
+export GLOSS="$HOME/Documents/glossgenius/projects/"
 export DOCS="$HOME/Documents/mikevive/docs/"
 export FARHOST="$HOME/.farhost/"
 
 # Custom aliases
 alias zshrc="nvim $HOME/.zshrc"
 alias projects="cd $PROJECTS"
+alias gloss="cd $GLOSS"
 alias docs="cd $DOCS"
 alias farhost="cd $FARHOST"
 
