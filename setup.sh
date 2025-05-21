@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -e
 
+# Disable "Last login" message
+touch ~/.hushlogin
+
 # Farhost
 if [ ! -d "$HOME/.farhost" ]; then
   echo "Installing Farshost..."
@@ -74,6 +77,12 @@ fi
 if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/pyautoenv" ]; then
   echo "Installing pyautoenv plugin..."
   git clone https://github.com/hsaunders1904/pyautoenv.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/pyautoenv
+fi
+
+# Zsh vi mode plugin
+if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-vi-mode" ]; then
+  echo "Installing zsh-vi-mode plugin..."
+  git clone https://github.com/jeffreytse/zsh-vi-mode.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-vi-mode
 fi
 
 # Powerlevel10k
