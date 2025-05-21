@@ -102,14 +102,14 @@ source $ZSH/oh-my-zsh.sh
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # Custom variables
-export PROJECTS="$HOME/Documents/mikevive/projects/"
-export GLOSS="$HOME/Documents/glossgenius/projects/"
+export MIKE="$HOME/Documents/mikevive/projects/"
 export DOCS="$HOME/Documents/mikevive/docs/"
+export GLOSS="$HOME/Documents/glossgenius/projects/"
 export FARHOST="$HOME/.farhost/"
 
 # Custom aliases
 alias zshrc="nvim $HOME/.zshrc"
-alias projects="cd $PROJECTS"
+alias projects="cd $MIKE"
 alias gloss="cd $GLOSS"
 alias docs="cd $DOCS"
 alias farhost="cd $FARHOST"

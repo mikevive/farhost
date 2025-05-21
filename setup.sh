@@ -108,21 +108,11 @@ echo "Linking .tmux.conf..."
 ln -sf "$(pwd)/.tmux.conf" "$HOME/.tmux.conf"
 
 # tpm (Tmux Plugin Manager)
-if ! command -v tmux &> /dev/null; then
-  echo "Installing Tmux..."
-  brew install tmux
+TPM_DIR="$HOME/.tmux/plugins/tpm"
+if [ ! -d "$TPM_DIR" ]; then
+  echo "Installing Tmux Plugin Manager (tpm)..."
+  git clone https://github.com/tmux-plugins/tpm "$TPM_DIR"
 fi
-
-# Backup tpm config folder
-TPM_CONFIG_DIR="$HOME/.tmux"
-if [ -d "$TPM_CONFIG_DIR" ]; then
-  echo "Backing up tpm config folder..."
-  mv "$TPM_CONFIG_DIR" "${TPM_CONFIG_DIR}_backup_$(date +%s)"
-fi
-
-# Link tpm config folder
-echo "Linking tpm config folder..."
-ln -s "$(pwd)/.tmux" "$TPM_CONFIG_DIR"
 
 # Neovim
 if ! command -v nvim &> /dev/null; then
