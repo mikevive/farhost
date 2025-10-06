@@ -1,6 +1,20 @@
 #!/usr/bin/env bash
 set -e
 
+# Parse command line arguments
+BACKUP=false
+while getopts "b" opt; do
+  case $opt in
+    b)
+      BACKUP=true
+      ;;
+    \?)
+      echo "Invalid option: -$OPTARG" >&2
+      exit 1
+      ;;
+  esac
+done
+
 # Disable "Last login" message
 touch ~/.hushlogin
 
@@ -11,9 +25,11 @@ if [ ! -d "$HOME/.farhost" ]; then
 fi
 
 # Backup .zshrc
-if [ -f "$HOME/.zshrc" ]; then
+if [ -f "$HOME/.zshrc" ] && [ "$BACKUP" = true ]; then
   echo "Backing up .zshrc..."
   mv "$HOME/.zshrc" "$HOME/.zshrc.backup_$(date +%s)"
+elif [ -f "$HOME/.zshrc" ]; then
+  rm -f "$HOME/.zshrc"
 fi
 
 # Link .zshrc
@@ -34,9 +50,11 @@ fi
 
 # Backup Ghostty config folder
 GHOSTTY_CONFIG_DIR="$HOME/.config/ghostty"
-if [ -d "$GHOSTTY_CONFIG_DIR" ]; then
+if [ -d "$GHOSTTY_CONFIG_DIR" ] && [ "$BACKUP" = true ]; then
   echo "Backing up Ghostty config folder..."
   mv "$GHOSTTY_CONFIG_DIR" "${GHOSTTY_CONFIG_DIR}_backup_$(date +%s)"
+elif [ -d "$GHOSTTY_CONFIG_DIR" ]; then
+  rm -rf "$GHOSTTY_CONFIG_DIR"
 fi
 
 # Link Ghostty config folder
@@ -91,9 +109,11 @@ if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k" ]; then
 fi
 
 # Backup .p10k.zsh
-if [ -f "$HOME/.p10k.zsh" ]; then
+if [ -f "$HOME/.p10k.zsh" ] && [ "$BACKUP" = true ]; then
   echo "Backing up .p10k.zsh..."
   cp "$HOME/.p10k.zsh" "$HOME/.p10k.zsh.backup_$(date +%s)"
+elif [ -f "$HOME/.p10k.zsh" ]; then
+  rm -f "$HOME/.p10k.zsh"
 fi
 
 # Link .p10k.zsh
@@ -107,9 +127,11 @@ if ! command -v tmux &> /dev/null; then
 fi
 
 # Backup .tmux.conf
-if [ -f "$HOME/.tmux.conf" ]; then
+if [ -f "$HOME/.tmux.conf" ] && [ "$BACKUP" = true ]; then
   echo "Backing up .tmux.conf..."
   cp "$HOME/.tmux.conf" "$HOME/.tmux.conf.backup_$(date +%s)"
+elif [ -f "$HOME/.tmux.conf" ]; then
+  rm -f "$HOME/.tmux.conf"
 fi
 
 # Link .tmux.conf
@@ -131,9 +153,11 @@ fi
 
 # Backup Neovim config folder
 NVIM_CONFIG_DIR="$HOME/.config/nvim"
-if [ -d "$NVIM_CONFIG_DIR" ]; then
+if [ -d "$NVIM_CONFIG_DIR" ] && [ "$BACKUP" = true ]; then
   echo "Backing up Neovim config folder..."
   mv "$NVIM_CONFIG_DIR" "${NVIM_CONFIG_DIR}_backup_$(date +%s)"
+elif [ -d "$NVIM_CONFIG_DIR" ]; then
+  rm -rf "$NVIM_CONFIG_DIR"
 fi
 
 # Link Neovim config folder

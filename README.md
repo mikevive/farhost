@@ -6,7 +6,7 @@ Farhost is a lightweight, script-driven project that automates the installation 
 
 - **Automated Setup:** Installs and configures a suite of development tools.
 - **Environment Isolation:** Configures your setup within `~/.farhost` to keep your system organized.
-- **Safe Backups:** Automatically backs up existing configuration files before linking new ones.
+- **Optional Backups:** Optionally backs up existing configuration files before linking new ones with the `-b` flag.
 - **Customization Ready:** Easily extend or modify the installation process to suit your workflow.
 - **One-Command Bootstrap:** Get started by executing a single command in your terminal.
 
@@ -43,4 +43,20 @@ To install Farhost, run the following command in your terminal:
 
 ```bash
 curl -s https://raw.githubusercontent.com/mikevive/farhost/refs/heads/main/setup.sh | bash
+```
+
+### Backup Flag
+
+By default, the setup script will replace existing configuration files. To backup your existing configurations before linking new ones, use the `-b` flag:
+
+```bash
+./setup.sh -b
+```
+
+This will create timestamped backups of:
+- `.zshrc`
+- `.p10k.zsh`
+- `.tmux.conf`
+- Ghostty config folder (`~/.config/ghostty`)
+- Neovim config folder (`~/.config/nvim`)
 
