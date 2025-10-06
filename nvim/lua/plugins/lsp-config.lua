@@ -22,18 +22,14 @@ return {
       vim.lsp.config("ts_ls", { capabilities = capabilities })
       vim.lsp.config("pyright", { capabilities = capabilities })
 
-      vim.keymap.set("n", "K", vim.lsp.buf.hover, {})
+      vim.keymap.set("n", "K", function()
+        vim.lsp.buf.hover({ border = "rounded" })
+      end, {})
       vim.keymap.set("n", "<leader>la", vim.lsp.buf.code_action, {})
       vim.keymap.set("n", "<space>rn", vim.lsp.buf.rename, {})
-    end,
-  },
-  {
-    "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
-    config = function()
-      require("lsp_lines").setup()
-
-      vim.diagnostic.config({ virtual_text = false })
-      -- vim.diagnostic.config({ virtual_lines = { only_current_line = true } })
+      vim.keymap.set("n", "<leader>le", function()
+        vim.diagnostic.open_float({ focusable = true, focus = true, border = "rounded" })
+      end, {})
     end,
   },
 }
