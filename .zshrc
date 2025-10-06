@@ -109,7 +109,7 @@ export FARHOST="$HOME/.farhost/"
 
 # Custom aliases
 alias zshrc="nvim $HOME/.zshrc"
-alias projects="cd $MIKE"
+alias mike="cd $MIKE"
 alias gloss="cd $GLOSS"
 alias docs="cd $DOCS"
 alias farhost="cd $FARHOST"
