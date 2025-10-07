@@ -1,11 +1,15 @@
 #!/usr/bin/env bash
 set -e
 
+echo "Starting development environment setup..."
+
 # Parse command line arguments
+echo "Parsing command line arguments..."
 BACKUP=false
 while getopts "b" opt; do
   case $opt in
     b)
+      echo "Backup flag is set."
       BACKUP=true
       ;;
     \?)
@@ -16,12 +20,15 @@ while getopts "b" opt; do
 done
 
 # Disable "Last login" message
+echo "Disabling 'Last login' message..."
 touch ~/.hushlogin
 
 # Farhost
 if [ ! -d "$HOME/.farhost" ]; then
   echo "Installing Farshost..."
   git clone https://github.com/mikevive/farhost.git "$HOME/.farhost"
+else
+  echo "Farhost is already installed."
 fi
 
 # Backup .zshrc
@@ -29,6 +36,7 @@ if [ -f "$HOME/.zshrc" ] && [ "$BACKUP" = true ]; then
   echo "Backing up .zshrc..."
   mv "$HOME/.zshrc" "$HOME/.zshrc.backup_$(date +%s)"
 elif [ -f "$HOME/.zshrc" ]; then
+  echo "Removing existing .zshrc..."
   rm -f "$HOME/.zshrc"
 fi
 
@@ -40,12 +48,16 @@ ln -sf "$(pwd)/.zshrc" "$HOME/.zshrc"
 if ! command -v brew &> /dev/null; then
   echo "Installing Homebrew..."
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+else
+  echo "Homebrew is already installed."
 fi
 
 # Ghosty
 if ! brew list --cask ghostty &> /dev/null; then
   echo "Installing Ghostty..."
   brew install --cask ghostty
+else
+  echo "Ghostty is already installed."
 fi
 
 # Backup Ghostty config folder
@@ -54,6 +66,7 @@ if [ -d "$GHOSTTY_CONFIG_DIR" ] && [ "$BACKUP" = true ]; then
   echo "Backing up Ghostty config folder..."
   mv "$GHOSTTY_CONFIG_DIR" "${GHOSTTY_CONFIG_DIR}_backup_$(date +%s)"
 elif [ -d "$GHOSTTY_CONFIG_DIR" ]; then
+  echo "Removing existing Ghostty config folder..."
   rm -rf "$GHOSTTY_CONFIG_DIR"
 fi
 
@@ -65,47 +78,64 @@ ln -s "$(pwd)/ghostty" "$GHOSTTY_CONFIG_DIR"
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
   echo "Installing Oh My Zsh..."
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+else
+  echo "Oh My Zsh is already installed."
 fi
 
 # Zsh Autosuggestion plugin
 if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions" ]; then
   echo "Installing zsh-autosuggestions plugin..."
   git clone https://github.com/zsh-users/zsh-autosuggestions.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+else
+  echo "zsh-autosuggestions plugin is already installed."
 fi
 
 # Zsh Syntax Highlighting plugin
 if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting" ]; then
-  echo "Installing zsh-autosuggestions plugin..."
+  echo "Installing zsh-syntax-highlighting plugin..."
   git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+else
+  echo "zsh-syntax-highlighting plugin is already installed."
 fi
 
 # Zsh Autocomplete plugin
 if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autocomplete" ]; then
   echo "Installing zsh-autocomplete plugin..."
   git clone https://github.com/marlonrichert/zsh-autocomplete.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autocomplete
+else
+  echo "zsh-autocomplete plugin is already installed."
 fi
 
 # Zsh Fast Syntax Highlighting plugin
 if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/fast-syntax-highlighting" ]; then
   echo "Installing fast-syntax-highlighting plugin..."
   git clone https://github.com/zdharma-continuum/fast-syntax-highlighting.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/fast-syntax-highlighting
+else
+  echo "fast-syntax-highlighting plugin is already installed."
 fi
 
 # Zsh pyautoenv plugin
 if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/pyautoenv" ]; then
   echo "Installing pyautoenv plugin..."
   git clone https://github.com/hsaunders1904/pyautoenv.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/pyautoenv
+else
+  echo "pyautoenv plugin is already installed."
 fi
 
 # Zsh vi mode plugin
 if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-vi-mode" ]; then
   echo "Installing zsh-vi-mode plugin..."
   git clone https://github.com/jeffreytse/zsh-vi-mode.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-vi-mode
+else
+  echo "zsh-vi-mode plugin is already installed."
 fi
 
 # Powerlevel10k
 if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k" ]; then
+  echo "Installing Powerlevel10k theme..."
   git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+else
+  echo "Powerlevel10k theme is already installed."
 fi
 
 # Backup .p10k.zsh
@@ -113,6 +143,7 @@ if [ -f "$HOME/.p10k.zsh" ] && [ "$BACKUP" = true ]; then
   echo "Backing up .p10k.zsh..."
   cp "$HOME/.p10k.zsh" "$HOME/.p10k.zsh.backup_$(date +%s)"
 elif [ -f "$HOME/.p10k.zsh" ]; then
+  echo "Removing existing .p10k.zsh..."
   rm -f "$HOME/.p10k.zsh"
 fi
 
@@ -121,9 +152,11 @@ echo "Linking .p10k.zsh..."
 ln -sf "$(pwd)/.p10k.zsh" "$HOME/.p10k.zsh"
 
 # Tmux
-if ! command -v tmux &> /dev/null; then
+if ! brew list tmux &> /dev/null; then
   echo "Installing Tmux..."
   brew install tmux
+else
+  echo "Tmux is already installed."
 fi
 
 # Backup .tmux.conf
@@ -131,6 +164,7 @@ if [ -f "$HOME/.tmux.conf" ] && [ "$BACKUP" = true ]; then
   echo "Backing up .tmux.conf..."
   cp "$HOME/.tmux.conf" "$HOME/.tmux.conf.backup_$(date +%s)"
 elif [ -f "$HOME/.tmux.conf" ]; then
+  echo "Removing existing .tmux.conf..."
   rm -f "$HOME/.tmux.conf"
 fi
 
@@ -143,12 +177,16 @@ TPM_DIR="$HOME/.tmux/plugins/tpm"
 if [ ! -d "$TPM_DIR" ]; then
   echo "Installing Tmux Plugin Manager (tpm)..."
   git clone https://github.com/tmux-plugins/tpm "$TPM_DIR"
+else
+  echo "TPM is already installed."
 fi
 
 # Neovim
-if ! command -v nvim &> /dev/null; then
+if ! brew list neovim &> /dev/null; then
   echo "Installing Neovim..."
   brew install neovim
+else
+  echo "Neovim is already installed."
 fi
 
 # Backup Neovim config folder
@@ -157,6 +195,7 @@ if [ -d "$NVIM_CONFIG_DIR" ] && [ "$BACKUP" = true ]; then
   echo "Backing up Neovim config folder..."
   mv "$NVIM_CONFIG_DIR" "${NVIM_CONFIG_DIR}_backup_$(date +%s)"
 elif [ -d "$NVIM_CONFIG_DIR" ]; then
+  echo "Removing existing Neovim config folder..."
   rm -rf "$NVIM_CONFIG_DIR"
 fi
 
@@ -169,26 +208,35 @@ if [ ! -d "$HOME/.nvm" ]; then
   echo "Installing NVM..."
   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
   # Load NVM for the current session
+  echo "Loading NVM for the current session..."
   export NVM_DIR="$HOME/.nvm"
   [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+else
+  echo "NVM is already installed."
 fi
 
 # Node JS
 if ! command -v node &> /dev/null; then
   echo "Installing latest Node.js via NVM..."
   nvm install node
+else
+  echo "Node.js is already installed."
 fi
 
 # UV
-if ! brew list | grep -q "uv"; then
+if ! brew list uv &> /dev/null; then
   echo "Installing UV..."
   brew install uv
+else
+  echo "UV is already installed."
 fi
 
 # Podman
-if ! brew list | grep -q "podman-desktop"; then
+if ! brew list --cask podman-desktop &> /dev/null; then
   echo "Installing Podman..."
   brew install --cask podman-desktop
+else
+  echo "Podman is already installed."
 fi
 
 echo "Development environment setup complete."
