@@ -125,3 +125,10 @@ fi
 # Vi mode history navigation keybindings (must come after zsh-vi-mode plugin)
 bindkey -M vicmd 'k' history-beginning-search-backward
 bindkey -M vicmd 'j' history-beginning-search-forward
+
+# Android SDK path
+export ANDROID_HOME=$HOME/Library/Android/sdk
+export PATH="$PATH:$ANDROID_HOME/platform-tools"
+export PATH="$PATH:$ANDROID_HOME/emulator"
+export PATH="$PATH:$ANDROID_HOME/cmdline-tools/latest/bin"
+
