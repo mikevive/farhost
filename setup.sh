@@ -231,6 +231,14 @@ else
   echo "UV is already installed."
 fi
 
+# Gemini
+if ! brew list gemini &> /dev/null; then
+  echo "Installing Gemini..."
+  brew install gemini
+else
+  echo "Gemini is already installed."
+fi
+
 # Podman
 if ! brew list --cask podman-desktop &> /dev/null; then
   echo "Installing Podman..."

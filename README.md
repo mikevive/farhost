@@ -24,6 +24,7 @@ Farhost installs and configures the following tools:
 - **[tmux](https://github.com/tmux/tmux):** A terminal multiplexer.
 - **[tpm](https://github.com/tmux-plugins/tpm):** Tmux Plugin Manager.
 - **[UV](https://github.com/astral-sh/uv):** An extremely fast Python package installer and resolver.
+- **[Gemini](https://gemini.google.com/):** A powerful, multimodal AI model from Google.
 - **[Podman Desktop](https://podman-desktop.io/):** A container management tool for developing and managing containers.
 
 ### Zsh Plugins
