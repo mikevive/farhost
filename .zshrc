@@ -115,7 +115,7 @@ alias mike="cd $MIKE"
 alias gloss="cd $GLOSS"
 alias docs="cd $DOCS"
 alias farhost="cd $FARHOST"
-alias dev ="cd $DEV"
+alias dev="cd $DEV"
 
 # Pyenv
 export PATH="$HOME/.pyenv/bin:$PATH"
