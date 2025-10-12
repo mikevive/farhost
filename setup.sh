@@ -273,6 +273,14 @@ else
   echo "Podman is already installed."
 fi
 
+# Specify CLI
+if ! uv tool list | grep -q "specify-cli"; then
+  echo "Installing Specify CLI..."
+  uv tool install specify-cli --from git+https://github.com/github/spec-kit.git
+else
+  echo "Specify CLI is already installed."
+fi
+
 echo "Development environment setup complete."
 
 # New TS project script

@@ -19,6 +19,8 @@ Farhost installs and configures the following tools:
 - **[oh-my-zsh](https://ohmyz.sh/):** A framework for managing your Zsh configuration.
 - **[powerlevel10k](https://github.com/romkatv/powerlevel10k):** A fast and highly customizable Zsh theme.
 - **[nvm](https://github.com/nvm-sh/nvm):** Node Version Manager.
+- **[RVM](https://rvm.io/):** Ruby Version Manager.
+- **[Ruby](https://www.ruby-lang.org/):** A dynamic, open source programming language with a focus on simplicity and productivity.
 - **[Node.js](https://nodejs.org/):** A JavaScript runtime built on Chrome's V8 engine (latest version via NVM).
 - **[neovim](https://neovim.io/):** A hyperextensible Vim-based text editor.
 - **[tmux](https://github.com/tmux/tmux):** A terminal multiplexer.
@@ -26,6 +28,7 @@ Farhost installs and configures the following tools:
 - **[UV](https://github.com/astral-sh/uv):** An extremely fast Python package installer and resolver.
 - **[Gemini](https://gemini.google.com/):** A powerful, multimodal AI model from Google.
 - **[Podman Desktop](https://podman-desktop.io/):** A container management tool for developing and managing containers.
+- **[Specify CLI](https://github.com/github/spec-kit):** A command-line interface for the GitHub Specification.
 
 ### Zsh Plugins
 
