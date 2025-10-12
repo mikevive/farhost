@@ -215,6 +215,32 @@ else
   echo "NVM is already installed."
 fi
 
+# RVM (Ruby Version Manager)
+if ! command -v rvm &> /dev/null; then
+  echo "Installing RVM..."
+  \curl -sSL https://get.rvm.io | bash -s stable
+  source "$HOME/.rvm/scripts/rvm"
+else
+  echo "RVM is already installed."
+fi
+
+# UV
+if ! brew list openssl@3 &> /dev/null; then
+  echo "Installing OpenSSL..."
+  brew install openssl@3
+else
+  echo "OpenSSL is already installed."
+fi
+
+# Ruby
+if ! rvm list | grep -q "3.4.5"; then
+  echo "Installing Ruby 3.4.5..."
+  rvm install 3.4.5 --with-openssl-dir=$(brew --prefix openssl@3)
+  rvm use 3.4.5 --default
+else
+  echo "Ruby 3.4.5 is already installed."
+fi
+
 # Node JS
 if ! command -v node &> /dev/null; then
   echo "Installing latest Node.js via NVM..."
@@ -232,9 +258,9 @@ else
 fi
 
 # Gemini
-if ! brew list gemini &> /dev/null; then
+if ! brew list gemini-cli &> /dev/null; then
   echo "Installing Gemini..."
-  brew install gemini
+  brew install gemini-cli
 else
   echo "Gemini is already installed."
 fi
