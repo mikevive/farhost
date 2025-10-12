@@ -107,6 +107,7 @@ export MIKE="$HOME/Documents/mikevive/projects/"
 export DOCS="$HOME/Documents/mikevive/docs/"
 export GLOSS="$HOME/Documents/glossgenius/projects/"
 export FARHOST="$HOME/.farhost/"
+export DEV="$HOME/dev/"
 
 # Custom aliases
 alias zshrc="nvim $HOME/.zshrc"
@@ -114,6 +115,7 @@ alias mike="cd $MIKE"
 alias gloss="cd $GLOSS"
 alias docs="cd $DOCS"
 alias farhost="cd $FARHOST"
+alias dev ="cd $DEV"
 
 # Pyenv
 export PATH="$HOME/.pyenv/bin:$PATH"

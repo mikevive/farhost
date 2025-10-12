@@ -203,6 +203,20 @@ fi
 echo "Linking Neovim config folder..."
 ln -s "$(pwd)/nvim" "$NVIM_CONFIG_DIR"
 
+# Backup dev folder
+DEV_DIR="$HOME/dev"
+if [ -d "$DEV_DIR" ] && [ "$BACKUP" = true ]; then
+  echo "Backing up dev folder..."
+  mv "$DEV_DIR" "${DEV_DIR}_backup_$(date +%s)"
+elif [ -d "$DEV_DIR" ]; then
+  echo "Removing existing dev folder..."
+  rm -rf "$DEV_DIR"
+fi
+
+# Link dev folder
+echo "Linking dev folder..."
+ln -s "$(pwd)/dev" "$DEV_DIR"
+
 # NVM (Node Version Manager)
 if [ ! -d "$HOME/.nvm" ]; then
   echo "Installing NVM..."
