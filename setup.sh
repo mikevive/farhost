@@ -287,6 +287,14 @@ else
   echo "Podman is already installed."
 fi
 
+# Bruno
+if ! brew list --cask bruno &> /dev/null; then
+  echo "Installing Bruno..."
+  brew install --cask bruno
+else
+  echo "Bruno is already installed."
+fi
+
 # Specify CLI
 if ! uv tool list | grep -q "specify-cli"; then
   echo "Installing Specify CLI..."

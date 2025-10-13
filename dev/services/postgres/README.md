@@ -6,14 +6,14 @@ Shared PostgreSQL instance for local development using Podman and Kubernetes YAM
 
 ```bash
 # Start PostgreSQL
-podman play kube ~/dev/shared-services/postgres/postgres.yaml
+podman play kube ~/dev/services/postgres/postgres.yaml
 
 # Stop PostgreSQL
-podman play kube --down ~/dev/shared-services/postgres/postgres.yaml
+podman play kube --down ~/dev/services/postgres/postgres.yaml
 
 # Recreate (clean restart)
-podman play kube --down ~/dev/shared-services/postgres/postgres.yaml
-podman play kube ~/dev/shared-services/postgres/postgres.yaml
+podman play kube --down ~/dev/services/postgres/postgres.yaml
+podman play kube ~/dev/services/postgres/postgres.yaml
 ```
 
 ## Connection Details
@@ -76,8 +76,8 @@ Note: Init scripts only run on first container creation. To apply changes:
 podman volume rm postgres-data
 
 # Recreate the pod
-podman play kube --down ~/dev/shared-services/postgres/postgres.yaml
-podman play kube ~/dev/shared-services/postgres/postgres.yaml
+podman play kube --down ~/dev/services/postgres/postgres.yaml
+podman play kube ~/dev/services/postgres/postgres.yaml
 ```
 
 ## Troubleshooting
@@ -102,13 +102,13 @@ podman volume inspect postgres-data
 ### Complete cleanup
 ```bash
 # Stop and remove pod
-podman play kube --down ~/dev/shared-services/postgres/postgres.yaml
+podman play kube --down ~/dev/services/postgres/postgres.yaml
 
 # Remove volume (WARNING: deletes all data)
 podman volume rm postgres-data
 
 # Start fresh
-podman play kube ~/dev/shared-services/postgres/postgres.yaml
+podman play kube ~/dev/services/postgres/postgres.yaml
 ```
 
 ## Shell Aliases (Optional)
@@ -117,8 +117,8 @@ Add to your `~/.zshrc` or `~/.bashrc`:
 
 ```bash
 # PostgreSQL aliases
-alias pgstart='podman play kube ~/dev/shared-services/postgres/postgres.yaml'
-alias pgstop='podman play kube --down ~/dev/shared-services/postgres/postgres.yaml'
+alias pgstart='podman play kube ~/dev/services/postgres/postgres.yaml'
+alias pgstop='podman play kube --down ~/dev/services/postgres/postgres.yaml'
 alias pgrestart='pgstop && pgstart'
 alias pgshell='podman exec -it dev-services-postgres psql -U root -d postgres'
 alias pglogs='podman logs -f dev-services-postgres'

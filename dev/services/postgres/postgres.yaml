@@ -35,5 +35,5 @@ spec:
       claimName: postgres-data
   - name: init-scripts
     hostPath:
-      path: /Users/mikevive/dev/shared-services/postgres/init-scripts
+      path: /Users/mikevive/dev/services/postgres/init-scripts
       type: Directory

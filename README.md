@@ -28,6 +28,7 @@ Farhost installs and configures the following tools:
 - **[UV](https://github.com/astral-sh/uv):** An extremely fast Python package installer and resolver.
 - **[Gemini](https://gemini.google.com/):** A powerful, multimodal AI model from Google.
 - **[Podman Desktop](https://podman-desktop.io/):** A container management tool for developing and managing containers.
+- **[Bruno](https://www.usebruno.com/):** A fast and Git-friendly open-source API client.
 - **[Specify CLI](https://github.com/github/spec-kit):** A command-line interface for the GitHub Specification.
 
 ### Zsh Plugins
