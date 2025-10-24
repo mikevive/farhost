@@ -29,6 +29,7 @@ Farhost installs and configures the following tools:
 - **[Gemini](https://gemini.google.com/):** A powerful, multimodal AI model from Google.
 - **[Podman Desktop](https://podman-desktop.io/):** A container management tool for developing and managing containers.
 - **[Bruno](https://www.usebruno.com/):** A fast and Git-friendly open-source API client.
+- **[Bruno CLI](https://docs.usebruno.com/cli/overview):** Command-line interface for Bruno API client.
 - **[Specify CLI](https://github.com/github/spec-kit):** A command-line interface for the GitHub Specification.
 
 ### Zsh Plugins
@@ -64,4 +65,5 @@ This will create timestamped backups of:
 - `.tmux.conf`
 - Ghostty config folder (`~/.config/ghostty`)
 - Neovim config folder (`~/.config/nvim`)
+- Dev folder (`~/dev`)
 

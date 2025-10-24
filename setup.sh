@@ -295,6 +295,14 @@ else
   echo "Bruno is already installed."
 fi
 
+# Bruno CLI
+if ! brew list bruno-cli &> /dev/null; then
+  echo "Installing Bruno CLI..."
+  brew install bruno-cli
+else
+  echo "Bruno CLI is already installed."
+fi
+
 # Specify CLI
 if ! uv tool list | grep -q "specify-cli"; then
   echo "Installing Specify CLI..."
