@@ -311,6 +311,14 @@ else
   echo "Specify CLI is already installed."
 fi
 
+# Git alias for clone-for-worktrees
+if ! git config --global alias.clone-for-worktrees &> /dev/null; then
+  echo "Setting up git alias for clone-for-worktrees..."
+  git config --global alias.clone-for-worktrees "!sh \$FARHOST/git-clone-bare-for-worktrees.sh"
+else
+  echo "Git alias clone-for-worktrees is already configured."
+fi
+
 echo "Development environment setup complete."
 
 # New TS project script
