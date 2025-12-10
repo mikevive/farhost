@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: dev-services
+  name: postgres 
   labels:
     app: postgres
     environment: development
@@ -35,5 +35,5 @@ spec:
       claimName: postgres-data
   - name: init-scripts
     hostPath:
-      path: /Users/mikevive/dev/services/postgres/init-scripts
+      path: ./init-scripts
       type: Directory

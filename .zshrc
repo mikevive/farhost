@@ -103,11 +103,10 @@ source $ZSH/oh-my-zsh.sh
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # Custom variables
-export MIKE="$HOME/Documents/mikevive/projects/"
+export MIKE="$HOME/Documents/mikevive/"
 export DOCS="$HOME/Documents/mikevive/docs/"
-export GLOSS="$HOME/Documents/glossgenius/projects/"
+export GLOSS="$HOME/Documents/glossgenius/"
 export FARHOST="$HOME/.farhost/"
-export DEV="$HOME/dev/"
 
 # Custom aliases
 alias zshrc="nvim $HOME/.zshrc"
@@ -115,7 +114,6 @@ alias mike="cd $MIKE"
 alias gloss="cd $GLOSS"
 alias docs="cd $DOCS"
 alias farhost="cd $FARHOST"
-alias dev="cd $DEV"
 
 # Pyenv
 export PATH="$HOME/.pyenv/bin:$PATH"
@@ -134,7 +132,6 @@ export ANDROID_HOME=$HOME/Library/Android/sdk
 export PATH="$PATH:$ANDROID_HOME/platform-tools"
 export PATH="$PATH:$ANDROID_HOME/emulator"
 export PATH="$PATH:$ANDROID_HOME/cmdline-tools/latest/bin"
-
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
