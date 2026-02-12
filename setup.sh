@@ -297,12 +297,20 @@ else
   echo "Specify CLI is already installed."
 fi
 
-# Git alias for clone-for-worktrees
-if ! git config --global alias.clone-for-worktrees &> /dev/null; then
-  echo "Setting up git alias for clone-for-worktrees..."
-  git config --global alias.clone-for-worktrees "!sh \$FARHOST/git-clone-bare-for-worktrees.sh"
+# Git alias for gwt-clone
+if ! git config --global alias.gwt-clone &> /dev/null; then
+  echo "Setting up git alias for gwt-clone..."
+  git config --global alias.gwt-clone "!sh \$FARHOST/git-clone-bare-for-worktrees.sh"
 else
-  echo "Git alias clone-for-worktrees is already configured."
+  echo "Git alias gwt-clone is already configured."
+fi
+
+# Git alias for commit pick
+if ! git config --global alias.pick &> /dev/null; then
+  echo "Setting up git alias for pick..."
+  git config --global alias.pick "!git log --oneline -30 | fzf | awk '{print \$1}' | pbcopy && echo 'Copied!'"
+else
+  echo "Git alias pick is already configured."
 fi
 
 echo "Development environment setup complete."
