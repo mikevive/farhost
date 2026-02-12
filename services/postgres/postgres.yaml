@@ -35,5 +35,5 @@ spec:
       claimName: postgres-data
   - name: init-scripts
     hostPath:
-      path: ./init-scripts
+      path: /Users/mikevive/.farhost/services/postgres/init-scripts
       type: Directory
