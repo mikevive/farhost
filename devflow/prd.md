@@ -36,19 +36,25 @@
 ### C. Data Management
 - **Interface:** Dedicated screens for managing Projects, Tasks, and Categories, accessible via vim-style commands.
 - **Project/Task Workflow:** The user first navigates to a `:projects` screen. Selecting a project takes them to a dedicated `:tasks` screen showing only tasks for that project.
-- **Operations:** Full CRUD (Create, Read, Update, Delete) is available on each respective screen for:
+- **Operations:** Create, Read, Update, and Archive are available on each respective screen for:
   - Categories (on the `:categories` screen)
   - Projects (on the `:projects` screen)
   - Tasks (on the project-specific `:tasks` screen)
-- **Editing Time Entries:**
+- **Archiving:** Projects, Tasks, and Categories are **never hard-deleted**. Instead, they are archived. Archived entities:
+  - Are hidden from active list views and selection dropdowns.
+  - Remain linked to historical time entries, so reports are never broken.
+  - Can be viewed on a dedicated archive screen accessible via `A` (Shift+a) from the respective management screen (e.g., pressing `A` on `:projects` shows archived projects).
+  - Can be **restored** from the archive screen back to active status.
+- **Time Entries:**
   - Users can edit any past time entry (modify start/end times, change category/task/project).
-  - Users can delete any time entry.
+  - Users can **hard-delete** any time entry (permanent removal) for correcting mistakes.
   - Allow overlapping entries without validation (user freedom).
 
 ### D. Daily Reporting
 - **Goal:** Real-time visibility into the current day's productivity
-- **Daily Log:** A chronological list of all completed time entries for the current date
-- **Daily Totals:** Sum of hours grouped by Project and Category for "Today" (00:00:00 to 23:59:59)
+- **Daily Log:** A chronological list of all completed time entries for the selected date
+- **Daily Totals:** Sum of hours grouped by Project and Category for the selected date (00:00:00 to 23:59:59)
+- **Historical Navigation:** Users can navigate to past and future days using keyboard shortcuts (`h` / `l` or left/right arrows). Defaults to "Today" on open.
 - **Access:** Available via vim-style command (e.g., `:daily`)
 
 ### E. Weekly Dynamic Reporting
@@ -76,19 +82,23 @@
 ### B. Keyboard Shortcuts
 - **Philosophy:** Vim-inspired keybindings throughout the application
 - **Navigation:** `hjkl` for movement (left, down, up, right)
-- **CRUD Actions:**
+- **Actions:**
   - `a` - Open "Add" modal
   - `e` - Open "Edit" modal for the selected item
-  - `d` - Open "Delete" confirmation modal for the selected item
+  - `d` - Archive the selected item (Projects/Tasks/Categories) or hard-delete (Time Entries)
+  - `A` (Shift+a) - Toggle archive view on management screens (Projects/Tasks/Categories)
+  - `r` - Restore the selected item (only available in archive view)
 - **Cancel/Back:** `Esc` key to close modals or go back
 - **Quit:** `:q` command
 
-### C. CRUD Modals
-All Create, Read, Update, and Delete (CRUD) operations for Projects, Tasks, and Categories are handled via modal dialogs to provide a clear and consistent user experience.
+### C. Modals
+All Create, Edit, Archive, and Delete operations are handled via modal dialogs to provide a clear and consistent user experience.
 
 - **Create/Edit:** A modal prompts the user for the necessary information (e.g., name).
-- **Delete:** A modal asks for confirmation before deleting an item.
-- **Buttons:** Modals include clear action buttons like `[Save]`, `[Delete]`, and `[Cancel]`.
+- **Archive (Projects/Tasks/Categories):** A modal asks for confirmation before archiving an item.
+- **Delete (Time Entries only):** A modal asks for confirmation before permanently deleting an entry.
+- **Restore:** A modal asks for confirmation before restoring an archived item.
+- **Buttons:** Modals include clear action buttons like `[Save]`, `[Archive]`, `[Delete]`, `[Restore]`, and `[Cancel]`.
 
 ### D. UI Wireframes
 
@@ -172,7 +182,7 @@ All Create, Read, Update, and Delete (CRUD) operations for Projects, Tasks, and 
 │     Personal-Site                                                            │
 │     Client-ABC                                                               │
 │                                                                              │
-│   (a)dd, (e)dit, (d)elete                                                    │
+│   (a)dd, (e)dit, (d) archive, (A) view archive                               │
 ├──────────────────────────────────────────────────────────────────────────────┤
 │ Timer (:t) | Daily (:d) | Weekly (:w) | :projects | Categories (:c) | Quit (:q)│
 └──────────────────────────────────────────────────────────────────────────────┘
@@ -223,7 +233,7 @@ All Create, Read, Update, and Delete (CRUD) operations for Projects, Tasks, and 
 │     UI Mockups                                                               │
 │     API Login                                                                │
 │                                                                              │
-│   (a)dd, (e)dit, (d)elete                                                    │
+│   (a)dd, (e)dit, (d) archive, (A) view archive                               │
 ├──────────────────────────────────────────────────────────────────────────────┤
 │ Timer (:t) | Daily (:d) | Weekly (:w) | Projects (:p) | Categories (:c) | Quit (:q)│
 └──────────────────────────────────────────────────────────────────────────────┘
@@ -243,7 +253,7 @@ All Create, Read, Update, and Delete (CRUD) operations for Projects, Tasks, and 
 │     Design                                                                   │
 │     Content                                                                  │
 │                                                                              │
-│   (a)dd, (e)dit, (d)elete                                                    │
+│   (a)dd, (e)dit, (d) archive, (A) view archive                               │
 ├──────────────────────────────────────────────────────────────────────────────┤
 │ Timer (:t) | Daily (:d) | Weekly (:w) | Projects (:p) | :categories | Quit (:q)│
 └──────────────────────────────────────────────────────────────────────────────┘
@@ -262,6 +272,17 @@ All Create, Read, Update, and Delete (CRUD) operations for Projects, Tasks, and 
   - Save the entry to `time_entries`
   - Clear the `active_session` table
   - No user prompt needed - handle automatically
+
+### G. Headless Operations / CLI
+To support integrations and scripting, the application must provide modes that do not launch the full TUI.
+
+- **Status Output:**
+  - A command-line flag (e.g., `devflow --status`) shall be implemented.
+  - When invoked, the application will check for an `active_session`.
+  - If a session is active, it will print the timer details to `stdout` in a single, parsable line and exit.
+    - **Format:** `Project Name > Task Name > Category Name | HH:MM:SS`
+  - If no session is active, it will print a concise status like `Timer Stopped` and exit.
+  - The running timer `HH:MM:SS` should reflect the current elapsed time.
 
 ## 4. Data Architecture (SQLite)
 
@@ -288,9 +309,29 @@ All Create, Read, Update, and Delete (CRUD) operations for Projects, Tasks, and 
 - **Overlapping entries allowed:** No validation to prevent overlapping time entries (user freedom)
 - **Single active timer:** Only one timer can be active at a time (enforced by auto-stopping previous timer)
 - **Midnight splits:** Automatic splitting of entries that cross midnight boundary
+- **Archive, not delete:** Projects, Tasks, and Categories are archived (never hard-deleted). Only time entries can be permanently deleted.
 - **No export functionality:** Users can manually backup the SQLite database file if needed
 
 ## 6. Technical Stack
 - **Framework:** Textual (Python)
 - **Database:** SQLite3
 - **Platform:** Cross-platform (Windows/macOS/Linux)
+
+## 7. Integrations
+
+### A. Tmux Plugin
+**Goal:** Integrate DevFlow seamlessly into a tmux workflow, providing at-a-glance status and quick access via a dedicated plugin.
+
+#### 1. Status Bar Component
+- **Functionality:** Display the currently running timer directly in the tmux status bar (e.g., in `status-right`).
+- **Implementation:**
+  - The plugin will periodically execute the `devflow --status` command.
+  - The output will be displayed in the status bar, providing a real-time view of the active task without needing the main application window to be open.
+  - **Example Display (Running):** `App-Redesign > API Integration > Code | 01:23:45`
+  - **Example Display (Stopped):** `Timer Stopped`
+
+#### 2. Floating Window Toggle
+- **Functionality:** A dedicated tmux keybinding (e.g., `prefix + T`) will toggle a floating window that runs the main DevFlow TUI application.
+- **Behavior:**
+  - When the keybinding is pressed and the window is not open, a new centered, floating tmux window will be created, launching the `devflow` application inside it.
+  - If the window is already open, pressing the keybinding again will close it.
