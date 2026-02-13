@@ -34,15 +34,16 @@
   - This ensures accurate daily reporting
 
 ### C. Data Management
-- **Interface:** Dedicated setup/management screen accessible via vim-style command (e.g., `:manage` or `:setup`)
-- **Operations:** Full CRUD (Create, Read, Update, Delete) for:
-  - Categories
-  - Projects
-  - Tasks (linked to Projects)
+- **Interface:** Dedicated screens for managing Projects, Tasks, and Categories, accessible via vim-style commands.
+- **Project/Task Workflow:** The user first navigates to a `:projects` screen. Selecting a project takes them to a dedicated `:tasks` screen showing only tasks for that project.
+- **Operations:** Full CRUD (Create, Read, Update, Delete) is available on each respective screen for:
+  - Categories (on the `:categories` screen)
+  - Projects (on the `:projects` screen)
+  - Tasks (on the project-specific `:tasks` screen)
 - **Editing Time Entries:**
-  - Users can edit any past time entry (modify start/end times, change category/task/project)
-  - Users can delete any time entry
-  - Allow overlapping entries without validation (user freedom)
+  - Users can edit any past time entry (modify start/end times, change category/task/project).
+  - Users can delete any time entry.
+  - Allow overlapping entries without validation (user freedom).
 
 ### D. Daily Reporting
 - **Goal:** Real-time visibility into the current day's productivity
@@ -68,22 +69,193 @@
   - `:timer` or `:t` - Go to timer view
   - `:daily` or `:d` - Show daily report
   - `:weekly` or `:w` - Show weekly report
-  - `:manage` or `:m` - Open data management screen
+  - `:projects` or `:p` - Open projects management screen
+  - `:categories` or `:c` - Open categories management screen
   - `:quit` or `:q` - Exit application
 
 ### B. Keyboard Shortcuts
 - **Philosophy:** Vim-inspired keybindings throughout the application
 - **Navigation:** `hjkl` for movement (left, down, up, right)
-- **Actions:** Standard vim conventions where applicable
-- **Cancel/Back:** `Esc` key
+- **CRUD Actions:**
+  - `a` - Open "Add" modal
+  - `e` - Open "Edit" modal for the selected item
+  - `d` - Open "Delete" confirmation modal for the selected item
+- **Cancel/Back:** `Esc` key to close modals or go back
 - **Quit:** `:q` command
 
-### C. Startup Behavior
+### C. CRUD Modals
+All Create, Read, Update, and Delete (CRUD) operations for Projects, Tasks, and Categories are handled via modal dialogs to provide a clear and consistent user experience.
+
+- **Create/Edit:** A modal prompts the user for the necessary information (e.g., name).
+- **Delete:** A modal asks for confirmation before deleting an item.
+- **Buttons:** Modals include clear action buttons like `[Save]`, `[Delete]`, and `[Cancel]`.
+
+### D. UI Wireframes
+
+#### Timer View (`:timer`)
+
+```
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ DevFlow                                                                      │
+├──────────────────────────────────────────────────────────────────────────────┤
+│   Project:   [ App-Redesign      ▼]                                          │
+│   Task:      [ API Integration   ▼]                                          │
+│   Category:  [ Code              ▼]                                          │
+│                           [   START TIMER   ]                                │
+│   ┌──────────────────────────────────────────────────────────────────────┐   │
+│   │ App-Redesign | API Integration | Code         01:23:45 | [Running]   │   │
+│   └──────────────────────────────────────────────────────────────────────┘   │
+├──────────────────────────────────────────────────────────────────────────────┤
+│ :timer | Daily (:d) | Weekly (:w) | Projects (:p) | Categories (:c) | Quit (:q)│
+└──────────────────────────────────────────────────────────────────────────────┘
+
+```
+
+#### Daily Report View (`:daily`)
+
+```
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ DevFlow - Daily Report (Today: 2023-10-27)                                   │
+├──────────────────────────────────────────────────────────────────────────────┤
+│   Daily Log:                                                                 │
+│   - 09:00 - 10:30 | App-Redesign  | UI Mockups    | Design       | 01:30:00  │
+│   - 10:30 - 12:00 | Personal-Site | Blog Post     | Content      | 01:30:00  │
+│   - 13:00 - 15:00 | App-Redesign  | API Login     | Code         | 02:00:00  │
+│                                                                              │
+│   Totals by Project:                                                         │
+│   - App-Redesign:  03:30:00                                                  │
+│   - Personal-Site: 01:30:00                                                  │
+│                                                                              │
+│   Totals by Category:                                                        │
+│   - Design:        01:30:00                                                  │
+│   - Content:       01:30:00                                                  │
+│   - Code:          02:00:00                                                  │
+├──────────────────────────────────────────────────────────────────────────────┤
+│ Timer (:t) | :daily | Weekly (:w) | Projects (:p) | Categories (:c) | Quit (:q)│
+└──────────────────────────────────────────────────────────────────────────────┘
+
+```
+
+#### Weekly Report View (`:weekly`)
+
+```
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ DevFlow - Weekly Report (Week 43: Oct 23 - Oct 29) ◄ Today ►                 │
+├──────────────────────────────────────────────────────────────────────────────┤
+│   Mon (23): ████████████ (6.0h)                                              │
+│   Tue (24): ████████████████ (8.0h)                                          │
+│   Wed (25): ██████████ (5.0h)                                                │
+│   Thu (26): ██████████████ (7.5h)                                            │
+│   Fri (27): █████ (2.5h)                                                     │
+│   Sat (28):                                                                  │
+│   Sun (29):                                                                  │
+│                                                                              │
+│   Total Hours: 29.0h                                                         │
+│                                                                              │
+│   Breakdown by Project:                                                      │
+│   - App-Redesign:  15.0h                                                     │
+│   - Personal-Site: 14.0h                                                     │
+├──────────────────────────────────────────────────────────────────────────────┤
+│ Timer (:t) | Daily (:d) | :weekly | Projects (:p) | Categories (:c) | Quit (:q)│
+└──────────────────────────────────────────────────────────────────────────────┘
+
+```
+
+#### Projects View (`:projects`)
+
+```
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ DevFlow - Projects                                                           │
+├──────────────────────────────────────────────────────────────────────────────┤
+│   > App-Redesign    (Select to view tasks)                                   │
+│     Personal-Site                                                            │
+│     Client-ABC                                                               │
+│                                                                              │
+│   (a)dd, (e)dit, (d)elete                                                    │
+├──────────────────────────────────────────────────────────────────────────────┤
+│ Timer (:t) | Daily (:d) | Weekly (:w) | :projects | Categories (:c) | Quit (:q)│
+└──────────────────────────────────────────────────────────────────────────────┘
+```
+
+#### Create/Edit Modal (Example for Project)
+
+```
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ DevFlow - Projects                                                           │
+├───────── --------------------------------------------------------------------┤
+│   > App-Rede│          ┌──────────────────────────────────┐                  │
+│     Person  │          │ Edit Project                     │                  │
+│     Client  │          ├──────────────────────────────────┤                  │
+│             │          │ Name: [ App-Redesign_          ] │                  │
+│             │          │                                  │                  │
+│   (a)dd, (  │          │         [Save]   [Cancel]        │                  │
+├───────────  │          └──────────────────────────────────┘                  │
+│ Timer (:t)  | Daily (:d) | Weekly (:w) | :projects | Categories (:c) | Quit (:q)│
+└──────────────────────────────────────────────────────────────────────────────┘
+```
+
+#### Delete Confirmation Modal (Example)
+
+```
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ DevFlow - Projects                                                           │
+├──────────────────────────────────────────────────────────────────────────────┤
+│   > App-Rede│          ┌──────────────────────────────────┐                  │
+│     Person  │          │ Confirm Delete                   │                  │
+│     Client  │          ├──────────────────────────────────┤                  │
+│             │          │ Are you sure you want to delete  │                  │
+│             │          │ "App-Redesign"?                  │                  │
+│             │          │                                  │                  │
+│   (a)dd, (  │          │        [Delete]   [Cancel]       │                  │
+├───────────  │          └──────────────────────────────────┘                  │
+│ Timer (:t) | Daily (:d) | Weekly (:w) | :projects | Categories (:c) | Quit (:q)│
+└──────────────────────────────────────────────────────────────────────────────┘
+```
+
+#### Tasks View (Navigated from Projects)
+
+```
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ DevFlow - Tasks for "App-Redesign"                                           │
+├──────────────────────────────────────────────────────────────────────────────┤
+│   > API Integration                                                          │
+│     UI Mockups                                                               │
+│     API Login                                                                │
+│                                                                              │
+│   (a)dd, (e)dit, (d)elete                                                    │
+├──────────────────────────────────────────────────────────────────────────────┤
+│ Timer (:t) | Daily (:d) | Weekly (:w) | Projects (:p) | Categories (:c) | Quit (:q)│
+└──────────────────────────────────────────────────────────────────────────────┘
+
+```
+
+#### Categories View (`:categories`)
+
+```
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ DevFlow - Categories                                                         │
+├──────────────────────────────────────────────────────────────────────────────┤
+│   > Code                                                                     │
+│     Document                                                                 │
+│     Distraction                                                              │
+│     Meeting                                                                  │
+│     Design                                                                   │
+│     Content                                                                  │
+│                                                                              │
+│   (a)dd, (e)dit, (d)elete                                                    │
+├──────────────────────────────────────────────────────────────────────────────┤
+│ Timer (:t) | Daily (:d) | Weekly (:w) | Projects (:p) | :categories | Quit (:q)│
+└──────────────────────────────────────────────────────────────────────────────┘
+
+```
+
+### E. Startup Behavior
 - **Default View:** Timer view (main screen)
 - **Database Check:** Verify database exists at `~/.farhost/devflow/devflow.db`, create if missing
 - **Active Session Check:** Check for active timer in `active_session` table
 
-### D. Crash Recovery
+### F. Crash Recovery
 - **Behavior:** If app crashes while a timer is running:
   - On restart, detect the orphaned active session
   - Automatically stop the timer at the crash time (based on last known state)
