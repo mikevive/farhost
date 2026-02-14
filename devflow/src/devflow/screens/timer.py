@@ -5,8 +5,7 @@ from __future__ import annotations
 from datetime import datetime
 
 from textual.app import ComposeResult
-from textual.containers import Vertical, Horizontal
-from textual.screen import Screen
+from textual.containers import Vertical, Horizontal, Container
 from textual.widgets import Button, Label, Select, Static
 from textual.timer import Timer
 
@@ -15,7 +14,7 @@ from devflow.timer import engine
 from devflow.widgets.bar_chart import format_duration
 
 
-class TimerScreen(Screen):
+class TimerScreen(Container):
     """Main timer view with selection controls and live elapsed display."""
 
     DEFAULT_CSS = """
@@ -23,41 +22,41 @@ class TimerScreen(Screen):
         background: #1C1C1E;
         padding: 1 2;
     }
-    TimerScreen #title {
+    #title {
         text-style: bold;
         color: #FFFFFF;
         width: 100%;
         text-align: center;
         margin-bottom: 1;
     }
-    TimerScreen .selector-row {
+    .selector-row {
         height: 3;
         width: 100%;
         margin-bottom: 1;
     }
-    TimerScreen .selector-label {
+    .selector-label {
         width: 12;
         color: #A1A1A6;
         padding-top: 1;
     }
-    TimerScreen Select {
+    Select {
         width: 1fr;
     }
-    TimerScreen #btn-row {
+    #btn-row {
         width: 100%;
         align: center middle;
         height: 3;
         margin: 1 0;
     }
-    TimerScreen #btn-start {
+    #btn-start {
         background: #E8735A;
         min-width: 20;
     }
-    TimerScreen #btn-stop {
+    #btn-stop {
         background: #FF453A;
         min-width: 20;
     }
-    TimerScreen #timer-display {
+    #timer-display {
         width: 100%;
         height: 3;
         border: solid #48484A;
@@ -66,11 +65,11 @@ class TimerScreen(Screen):
         color: #FFFFFF;
         margin-top: 1;
     }
-    TimerScreen #timer-clock {
+    #timer-clock {
         color: #E8735A;
         text-style: bold;
     }
-    TimerScreen #timer-info {
+    #timer-info {
         color: #A1A1A6;
     }
     """

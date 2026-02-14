@@ -6,7 +6,7 @@ from datetime import date, datetime, timedelta
 
 from textual.app import ComposeResult
 from textual.binding import Binding
-from textual.screen import Screen
+from textual.containers import Container
 from textual.widgets import DataTable, Static
 
 from devflow.db import queries
@@ -14,7 +14,7 @@ from devflow.widgets.bar_chart import format_duration
 from devflow.widgets.modal import ConfirmModal
 
 
-class DailyReportScreen(Screen):
+class DailyReportScreen(Container):
     """Daily report: chronological log, totals by project/category, date navigation."""
 
     DEFAULT_CSS = """
@@ -22,22 +22,22 @@ class DailyReportScreen(Screen):
         background: #1C1C1E;
         padding: 1 2;
     }
-    DailyReportScreen #title {
+    #title {
         text-style: bold;
         color: #FFFFFF;
         width: 100%;
         margin-bottom: 1;
     }
-    DailyReportScreen #nav-hint {
+    #nav-hint {
         color: #A1A1A6;
         margin-bottom: 1;
     }
-    DailyReportScreen DataTable {
+    DataTable {
         height: 1fr;
         background: #2C2C2E;
         border: solid #48484A;
     }
-    DailyReportScreen #summary {
+    #summary {
         height: auto;
         max-height: 15;
         color: #A1A1A6;
@@ -46,7 +46,7 @@ class DailyReportScreen(Screen):
         background: #2C2C2E;
         border: solid #48484A;
     }
-    DailyReportScreen #entry-hints {
+    #entry-hints {
         color: #A1A1A6;
         margin-top: 1;
     }

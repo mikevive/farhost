@@ -4,14 +4,14 @@ from __future__ import annotations
 
 from textual.app import ComposeResult
 from textual.binding import Binding
-from textual.screen import Screen
+from textual.containers import Container
 from textual.widgets import DataTable, Static
 
 from devflow.db import queries
 from devflow.widgets.modal import ConfirmModal, InputModal
 
 
-class ProjectsScreen(Screen):
+class ProjectsScreen(Container):
     """Manage projects: list, add, edit, archive, restore."""
 
     DEFAULT_CSS = """
@@ -19,18 +19,18 @@ class ProjectsScreen(Screen):
         background: #1C1C1E;
         padding: 1 2;
     }
-    ProjectsScreen #title {
+    #title {
         text-style: bold;
         color: #FFFFFF;
         width: 100%;
         margin-bottom: 1;
     }
-    ProjectsScreen DataTable {
+    DataTable {
         height: 1fr;
         background: #2C2C2E;
         border: solid #48484A;
     }
-    ProjectsScreen #hints {
+    #hints {
         color: #A1A1A6;
         margin-top: 1;
     }
@@ -42,7 +42,6 @@ class ProjectsScreen(Screen):
         Binding("d", "archive", "Archive", show=False),
         Binding("A", "toggle_archive", "Archive view", show=False),
         Binding("r", "restore", "Restore", show=False),
-        Binding("enter", "select_project", "View tasks", show=False),
     ]
 
     def __init__(self) -> None:
@@ -59,6 +58,14 @@ class ProjectsScreen(Screen):
         table.add_column("Name", key="name")
         table.cursor_type = "row"
         self._refresh_table()
+
+    def on_data_table_row_selected(self, event: DataTable.RowSelected) -> None:
+        if self._show_archived:
+            return
+        if event.row_key.value is None:
+            return
+        project_id = int(event.row_key.value)
+        self.app._navigate_to("tasks", project_id=project_id)
 
     def _refresh_table(self) -> None:
         conn = self.app.db
@@ -88,7 +95,7 @@ class ProjectsScreen(Screen):
         if table.row_count == 0:
             return None
         row_key = table.coordinate_to_cell_key(table.cursor_coordinate).row_key
-        return int(row_key.value)
+        return int(row_key.value) if row_key.value else None
 
     def action_add(self) -> None:
         if self._show_archived:
@@ -164,14 +171,3 @@ class ProjectsScreen(Screen):
     def action_toggle_archive(self) -> None:
         self._show_archived = not self._show_archived
         self._refresh_table()
-
-    def action_select_project(self) -> None:
-        if self._show_archived:
-            return
-        project_id = self._get_selected_id()
-        if project_id is None:
-            return
-
-        from devflow.screens.tasks import TasksScreen
-
-        self.app.push_screen(TasksScreen(project_id))

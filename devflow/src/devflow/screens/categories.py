@@ -4,14 +4,14 @@ from __future__ import annotations
 
 from textual.app import ComposeResult
 from textual.binding import Binding
-from textual.screen import Screen
+from textual.containers import Container
 from textual.widgets import DataTable, Static
 
 from devflow.db import queries
 from devflow.widgets.modal import ConfirmModal, InputModal
 
 
-class CategoriesScreen(Screen):
+class CategoriesScreen(Container):
     """Manage categories: list, add, edit, archive, restore."""
 
     DEFAULT_CSS = """
@@ -19,18 +19,18 @@ class CategoriesScreen(Screen):
         background: #1C1C1E;
         padding: 1 2;
     }
-    CategoriesScreen #title {
+    #title {
         text-style: bold;
         color: #FFFFFF;
         width: 100%;
         margin-bottom: 1;
     }
-    CategoriesScreen DataTable {
+    DataTable {
         height: 1fr;
         background: #2C2C2E;
         border: solid #48484A;
     }
-    CategoriesScreen #hints {
+    #hints {
         color: #A1A1A6;
         margin-top: 1;
     }

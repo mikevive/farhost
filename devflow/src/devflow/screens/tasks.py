@@ -4,14 +4,14 @@ from __future__ import annotations
 
 from textual.app import ComposeResult
 from textual.binding import Binding
-from textual.screen import Screen
+from textual.containers import Container
 from textual.widgets import DataTable, Static
 
 from devflow.db import queries
 from devflow.widgets.modal import ConfirmModal, InputModal
 
 
-class TasksScreen(Screen):
+class TasksScreen(Container):
     """Manage tasks for a specific project."""
 
     DEFAULT_CSS = """
@@ -19,18 +19,18 @@ class TasksScreen(Screen):
         background: #1C1C1E;
         padding: 1 2;
     }
-    TasksScreen #title {
+    #title {
         text-style: bold;
         color: #FFFFFF;
         width: 100%;
         margin-bottom: 1;
     }
-    TasksScreen DataTable {
+    DataTable {
         height: 1fr;
         background: #2C2C2E;
         border: solid #48484A;
     }
-    TasksScreen #hints {
+    #hints {
         color: #A1A1A6;
         margin-top: 1;
     }
@@ -170,4 +170,4 @@ class TasksScreen(Screen):
         self._refresh_table()
 
     def action_go_back(self) -> None:
-        self.app.pop_screen()
+        self.app._navigate_to("projects")

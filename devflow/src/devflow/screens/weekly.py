@@ -6,14 +6,14 @@ from datetime import date, datetime, timedelta
 
 from textual.app import ComposeResult
 from textual.binding import Binding
-from textual.screen import Screen
+from textual.containers import Container
 from textual.widgets import Static
 
 from devflow.db import queries
 from devflow.widgets.bar_chart import format_hours, generate_bar
 
 
-class WeeklyReportScreen(Screen):
+class WeeklyReportScreen(Container):
     """Weekly report: ASCII bar charts per day, project/category breakdowns."""
 
     DEFAULT_CSS = """
@@ -21,17 +21,17 @@ class WeeklyReportScreen(Screen):
         background: #1C1C1E;
         padding: 1 2;
     }
-    WeeklyReportScreen #title {
+    #title {
         text-style: bold;
         color: #FFFFFF;
         width: 100%;
         margin-bottom: 1;
     }
-    WeeklyReportScreen #nav-hint {
+    #nav-hint {
         color: #A1A1A6;
         margin-bottom: 1;
     }
-    WeeklyReportScreen #chart {
+    #chart {
         height: auto;
         color: #FFFFFF;
         padding: 1;
@@ -39,7 +39,7 @@ class WeeklyReportScreen(Screen):
         border: solid #48484A;
         margin-bottom: 1;
     }
-    WeeklyReportScreen #breakdown {
+    #breakdown {
         height: auto;
         color: #A1A1A6;
         padding: 1;

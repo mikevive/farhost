@@ -14,15 +14,18 @@ def main():
     args = parser.parse_args()
 
     if args.status:
-        from devflow.cli import print_status
-        from devflow.db.connection import get_connection
-
-        conn = get_connection()
         try:
-            output = print_status(conn)
-            print(output)
-        finally:
-            conn.close()
+            from devflow.cli import print_status
+            from devflow.db.connection import get_connection
+
+            conn = get_connection()
+            try:
+                output = print_status(conn)
+                print(output)
+            finally:
+                conn.close()
+        except Exception as e:
+            print(f"DevFlow Status Error: {e}")
         sys.exit(0)
 
     from devflow.app import DevFlowApp
