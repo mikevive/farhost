@@ -162,3 +162,4 @@ class WeeklyReportScreen(Container):
     def action_cycle_view(self) -> None:
         self._view_mode = (self._view_mode + 1) % 3
         self._refresh()
+        self.focus()

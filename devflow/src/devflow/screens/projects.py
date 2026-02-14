@@ -60,6 +60,7 @@ class ProjectsScreen(Container):
         table.add_column("Name", key="name")
         table.cursor_type = "row"
         self._refresh_table()
+        table.focus()
 
     def on_data_table_row_selected(self, event: DataTable.RowSelected) -> None:
         if self._show_archived:

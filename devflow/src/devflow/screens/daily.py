@@ -78,6 +78,7 @@ class DailyReportScreen(Container):
         table.add_columns("Start", "End", "Project", "Task", "Category", "Duration")
         table.cursor_type = "row"
         self._refresh()
+        table.focus()
 
     def _refresh(self) -> None:
         conn = self.app.db
@@ -161,6 +162,13 @@ class DailyReportScreen(Container):
     def action_cycle_view(self) -> None:
         self._view_mode = (self._view_mode + 1) % 3
         self._refresh()
+        
+        # If we just hid the table, the screen container needs focus
+        # to keep handling key bindings (like 'v' or 'h/l')
+        if self._view_mode != 0:
+            self.focus()
+        else:
+            self.query_one("#daily-table", DataTable).focus()
 
     def action_delete_entry(self) -> None:
         table = self.query_one("#daily-table", DataTable)

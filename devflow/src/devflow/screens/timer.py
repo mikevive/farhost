@@ -120,6 +120,13 @@ class TimerScreen(Container):
         self._update_timer_display()
         self._timer_interval = self.set_interval(1, self._tick)
         self._midnight_interval = self.set_interval(60, self._check_midnight)
+        
+        # Initial focus
+        session = queries.get_active_session(self.app.db) if self.app.db else None
+        if session:
+            self.query_one("#btn-stop", Button).focus()
+        else:
+            self.query_one("#sel-project", Select).focus()
 
     def _load_selectors(self) -> None:
         conn = self.app.db
@@ -160,10 +167,12 @@ class TimerScreen(Container):
 
             engine.start_timer(conn, task_sel.value, cat_sel.value)
             self._update_timer_display()
+            self.query_one("#btn-stop", Button).focus()
 
         elif event.button.id == "btn-stop":
             engine.stop_timer(conn)
             self._update_timer_display()
+            self.query_one("#sel-project", Select).focus()
 
     def _tick(self) -> None:
         self._update_timer_display()

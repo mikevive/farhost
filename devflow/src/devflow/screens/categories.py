@@ -60,6 +60,7 @@ class CategoriesScreen(Container):
         table.add_column("Name", key="name")
         table.cursor_type = "row"
         self._refresh_table()
+        table.focus()
 
     def _refresh_table(self) -> None:
         conn = self.app.db
