@@ -257,12 +257,33 @@ else
   echo "UV is already installed."
 fi
 
+# Devflow
+if ! uv tool list | grep -q "devflow"; then
+  echo "Installing Devflow..."
+  uv tool install -e ./devflow
+else
+  echo "Devflow is already installed."
+fi
+
+# Devflow Tmux script
+echo "Setting up Devflow Tmux script..."
+cp .tmux/plugins/devflow/devflow.sh .tmux/plugins/tmux/scripts/devflow.sh
+chmod +x .tmux/plugins/tmux/scripts/devflow.sh
+
 # Gemini
 if ! brew list gemini-cli &> /dev/null; then
   echo "Installing Gemini..."
   brew install gemini-cli
 else
   echo "Gemini is already installed."
+fi
+
+# Claude
+if ! command -v claude &> /dev/null; then
+  echo "Installing Claude..."
+  curl -fsSL https://claude.ai/install.sh | bash
+else
+  echo "Claude is already installed."
 fi
 
 # Podman
