@@ -135,11 +135,14 @@ class TestCrashRecovery:
         t = queries.create_task(conn, p.id, "CRT")
         c = queries.list_categories(conn)[0]
 
-        queries.set_active_session(conn, t.id, c.id, "2024-01-15 09:00:00")
+        # Set session to yesterday to trigger a split
+        yesterday = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d %H:%M:%S")
+        queries.set_active_session(conn, t.id, c.id, yesterday)
 
         entries = engine.recover_crashed_session(conn)
         assert len(entries) >= 1
-        assert queries.get_active_session(conn) is None
+        # Session should STILL be active
+        assert queries.get_active_session(conn) is not None
 
     def test_recover_no_session(self, conn):
         entries = engine.recover_crashed_session(conn)
@@ -155,5 +158,10 @@ class TestCrashRecovery:
         queries.set_active_session(conn, t.id, c.id, two_days_ago)
 
         entries = engine.recover_crashed_session(conn)
-        assert len(entries) >= 3  # At least 3 entries (2 days ago, yesterday, today)
-        assert queries.get_active_session(conn) is None
+        assert len(entries) >= 2  # Entries for 2 days ago and yesterday
+        
+        # Session should be active with today's midnight
+        session = queries.get_active_session(conn)
+        assert session is not None
+        today_midnight = datetime.now().strftime("%Y-%m-%d") + " 00:00:00"
+        assert session.start_time == today_midnight

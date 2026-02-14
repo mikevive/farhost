@@ -162,10 +162,17 @@ class TimerScreen(Container):
 
         display = self.query_one("#timer-display", Static)
         session = queries.get_active_session(conn)
+        btn_start = self.query_one("#btn-start", Button)
+        btn_stop = self.query_one("#btn-stop", Button)
 
         if session is None:
             display.update("[#A1A1A6]No timer running[/]")
+            btn_start.display = True
+            btn_stop.display = False
             return
+
+        btn_start.display = False
+        btn_stop.display = True
 
         task = queries.get_task(conn, session.task_id)
         category = queries.get_category(conn, session.category_id)

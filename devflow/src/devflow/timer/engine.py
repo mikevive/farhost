@@ -43,29 +43,18 @@ def stop_timer(conn: sqlite3.Connection) -> list[TimeEntry]:
 def recover_crashed_session(conn: sqlite3.Connection) -> list[TimeEntry]:
     """Recover an orphaned active session on startup.
 
-    Uses now() as end_time, applies midnight splits if needed.
-    Returns the list of created time entries.
+    Keeps the session running, but handles midnight splits if needed.
+    Returns any entries created by splits.
     """
-    session = queries.get_active_session(conn)
-    if session is None:
-        return []
-
-    now = datetime.now()
-    start = datetime.strptime(session.start_time, "%Y-%m-%d %H:%M:%S")
-
-    entries = _create_entries_with_midnight_split(
-        conn, session.task_id, session.category_id, start, now
-    )
-    queries.clear_active_session(conn)
-    return entries
+    return check_midnight_split(conn)
 
 
 def check_midnight_split(conn: sqlite3.Connection) -> list[TimeEntry]:
     """Check if the active timer crossed midnight and split if needed.
 
-    Called periodically (e.g., every minute). If the current date differs
-    from the session's start date, splits the timer at midnight and starts
-    a new session for today.
+    Called periodically (e.g., every minute) and on startup. If the current
+    date differs from the session's start date, splits the timer at each
+    midnight boundary and continues the session for today.
 
     Returns any entries created by the split.
     """
@@ -79,14 +68,13 @@ def check_midnight_split(conn: sqlite3.Connection) -> list[TimeEntry]:
     if start.date() == now.date():
         return []
 
-    # Split: save entry up to midnight, restart session at midnight today
-    midnight = datetime.combine(start.date() + timedelta(days=1), datetime.min.time())
+    # Split: save all entries up to today's midnight
+    today_midnight = datetime.combine(now.date(), datetime.min.time())
     entries = _create_entries_with_midnight_split(
-        conn, session.task_id, session.category_id, start, midnight
+        conn, session.task_id, session.category_id, start, today_midnight
     )
 
-    # Start new session at midnight of today
-    today_midnight = datetime.combine(now.date(), datetime.min.time())
+    # Start new session at midnight of today so it continues running
     today_str = today_midnight.strftime("%Y-%m-%d %H:%M:%S")
     queries.set_active_session(conn, session.task_id, session.category_id, today_str)
 
