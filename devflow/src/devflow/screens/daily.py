@@ -58,6 +58,8 @@ class DailyReportScreen(Container):
         Binding("l,right", "next_day", "Next day", show=False),
         Binding("d", "delete_entry", "Delete entry", show=False),
         Binding("v", "cycle_view", "Cycle View", show=False),
+        Binding("j", "cursor_down", "Cursor Down", show=False),
+        Binding("k", "cursor_up", "Cursor Up", show=False),
     ]
 
     def __init__(self) -> None:
@@ -79,6 +81,12 @@ class DailyReportScreen(Container):
         table.cursor_type = "row"
         self._refresh()
         table.focus()
+
+    def action_cursor_down(self) -> None:
+        self.query_one("#daily-table", DataTable).action_cursor_down()
+
+    def action_cursor_up(self) -> None:
+        self.query_one("#daily-table", DataTable).action_cursor_up()
 
     def _refresh(self) -> None:
         conn = self.app.db

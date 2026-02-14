@@ -44,6 +44,8 @@ class CategoriesScreen(Container):
         Binding("d", "archive", "Archive", show=False),
         Binding("A", "toggle_archive", "Archive view", show=False),
         Binding("r", "restore", "Restore", show=False),
+        Binding("j", "cursor_down", "Cursor Down", show=False),
+        Binding("k", "cursor_up", "Cursor Up", show=False),
     ]
 
     def __init__(self) -> None:
@@ -61,6 +63,12 @@ class CategoriesScreen(Container):
         table.cursor_type = "row"
         self._refresh_table()
         table.focus()
+
+    def action_cursor_down(self) -> None:
+        self.query_one("#categories-table", DataTable).action_cursor_down()
+
+    def action_cursor_up(self) -> None:
+        self.query_one("#categories-table", DataTable).action_cursor_up()
 
     def _refresh_table(self) -> None:
         conn = self.app.db

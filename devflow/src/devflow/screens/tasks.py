@@ -45,6 +45,8 @@ class TasksScreen(Container):
         Binding("A", "toggle_archive", "Archive view", show=False),
         Binding("r", "restore", "Restore", show=False),
         Binding("escape", "go_back", "Back", show=False),
+        Binding("j", "cursor_down", "Cursor Down", show=False),
+        Binding("k", "cursor_up", "Cursor Up", show=False),
     ]
 
     def __init__(self, project_id: int) -> None:
@@ -63,6 +65,12 @@ class TasksScreen(Container):
         table.cursor_type = "row"
         self._refresh_table()
         table.focus()
+
+    def action_cursor_down(self) -> None:
+        self.query_one("#tasks-table", DataTable).action_cursor_down()
+
+    def action_cursor_up(self) -> None:
+        self.query_one("#tasks-table", DataTable).action_cursor_up()
 
     def _refresh_table(self) -> None:
         conn = self.app.db
