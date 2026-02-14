@@ -28,25 +28,42 @@ class CommandBar(Widget):
 
     DEFAULT_CSS = """
     CommandBar {
-        height: 3;
+        height: 1;
         dock: bottom;
         background: #282a36;
-    }
-    CommandBar Horizontal {
-        height: 1;
-        width: 100%;
     }
     CommandBar #nav-hints {
         width: 100%;
         color: #6272a4;
         padding: 0 1;
     }
-    CommandBar #command-input {
+    CommandBar #nav-hints.hidden {
+        display: none;
+    }
+    CommandBar #input-container {
         display: none;
         width: 100%;
+        height: 1;
+        padding: 0 1;
     }
-    CommandBar #command-input.visible {
+    CommandBar #input-container.visible {
         display: block;
+    }
+    CommandBar #input-prefix {
+        width: auto;
+        color: #bd93f9;
+        text-style: bold;
+    }
+    CommandBar #command-input {
+        width: 1fr;
+        height: 1;
+        background: transparent;
+        border: none;
+        padding: 0;
+        color: #f8f8f2;
+    }
+    CommandBar #command-input:focus {
+        border: none;
     }
     """
 
@@ -57,7 +74,9 @@ class CommandBar(Widget):
     def compose(self) -> ComposeResult:
         hints = self._build_hints()
         yield Static(hints, id="nav-hints")
-        yield Input(placeholder=":", id="command-input")
+        with Horizontal(id="input-container"):
+            yield Static(":", id="input-prefix")
+            yield Input(id="command-input")
 
     def _build_hints(self) -> str:
         screens = [
@@ -77,16 +96,24 @@ class CommandBar(Widget):
         return " | ".join(parts)
 
     def activate_input(self) -> None:
-        """Show the command input and focus it."""
+        """Show the command input container and focus it, hiding hints."""
+        hints = self.query_one("#nav-hints", Static)
+        container = self.query_one("#input-container", Horizontal)
         inp = self.query_one("#command-input", Input)
-        inp.add_class("visible")
+        
+        hints.add_class("hidden")
+        container.add_class("visible")
         inp.value = ""
         inp.focus()
 
     def deactivate_input(self) -> None:
-        """Hide the command input."""
+        """Hide the command input container and show hints."""
+        hints = self.query_one("#nav-hints", Static)
+        container = self.query_one("#input-container", Horizontal)
         inp = self.query_one("#command-input", Input)
-        inp.remove_class("visible")
+        
+        container.remove_class("visible")
+        hints.remove_class("hidden")
         inp.value = ""
 
     def set_active_screen(self, screen_name: str) -> None:

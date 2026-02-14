@@ -40,15 +40,14 @@ class DailyReportScreen(Container):
         border: solid #6272a4;
     }
     #summary {
-        height: auto;
-        max-height: 15;
+        height: 1fr;
         color: #f8f8f2;
-        margin-top: 1;
-        padding: 1;
+        padding: 1 2;
         background: #44475a;
         border: solid #6272a4;
+        display: none;
     }
-    #entry-hints {
+    #footer-hints {
         color: #6272a4;
         margin-top: 1;
     }
@@ -58,18 +57,20 @@ class DailyReportScreen(Container):
         Binding("h,left", "prev_day", "Previous day", show=False),
         Binding("l,right", "next_day", "Next day", show=False),
         Binding("d", "delete_entry", "Delete entry", show=False),
+        Binding("s", "toggle_view", "Toggle Summary", show=False),
     ]
 
     def __init__(self) -> None:
         super().__init__()
         self._current_date = date.today()
+        self._show_summary = False
 
     def compose(self) -> ComposeResult:
         yield Static("", id="title")
         yield Static("◄ h  Previous day  |  Next day  l ►", id="nav-hint")
         yield DataTable(id="daily-table")
         yield Static("", id="summary")
-        yield Static("(d) delete entry", id="entry-hints")
+        yield Static("(d) delete entry | (s) view summary", id="footer-hints")
 
     def on_mount(self) -> None:
         table = self.query_one("#daily-table", DataTable)
@@ -90,14 +91,28 @@ class DailyReportScreen(Container):
             day_label = "Today"
         else:
             day_label = self._current_date.strftime("%a")
+        
+        view_label = "Summary" if self._show_summary else "Log"
         self.query_one("#title", Static).update(
-            f"DevFlow - Daily Report ({date_str} {day_label})"
+            f"DevFlow - Daily {view_label} ({date_str} {day_label})"
         )
 
-        # Entries table
+        # Toggle visibility
         table = self.query_one("#daily-table", DataTable)
-        table.clear()
+        summary = self.query_one("#summary", Static)
+        hints = self.query_one("#footer-hints", Static)
 
+        if self._show_summary:
+            table.display = False
+            summary.display = True
+            hints.update("(s) view log")
+        else:
+            table.display = True
+            summary.display = False
+            hints.update("(d) delete entry | (s) view summary")
+
+        # Entries table
+        table.clear()
         entries = queries.list_time_entries_for_date(conn, date_str)
         for e in entries:
             task = queries.get_task(conn, e.task_id)
@@ -133,7 +148,7 @@ class DailyReportScreen(Container):
             for name, secs in category_totals:
                 lines.append(f"  {name}: {format_duration(secs)}")
 
-        self.query_one("#summary", Static).update("\n".join(lines) if lines else "No entries")
+        summary.update("\n".join(lines) if lines else "No entries")
 
     def action_prev_day(self) -> None:
         self._current_date -= timedelta(days=1)
@@ -141,6 +156,10 @@ class DailyReportScreen(Container):
 
     def action_next_day(self) -> None:
         self._current_date += timedelta(days=1)
+        self._refresh()
+
+    def action_toggle_view(self) -> None:
+        self._show_summary = not self._show_summary
         self._refresh()
 
     def action_delete_entry(self) -> None:
