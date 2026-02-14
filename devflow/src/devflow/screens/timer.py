@@ -19,12 +19,12 @@ class TimerScreen(Container):
 
     DEFAULT_CSS = """
     TimerScreen {
-        background: #1C1C1E;
+        background: #282a36;
         padding: 1 2;
     }
     #title {
         text-style: bold;
-        color: #FFFFFF;
+        color: #f8f8f2;
         width: 100%;
         text-align: center;
         margin-bottom: 1;
@@ -36,7 +36,7 @@ class TimerScreen(Container):
     }
     .selector-label {
         width: 12;
-        color: #A1A1A6;
+        color: #6272a4;
         padding-top: 1;
     }
     Select {
@@ -49,28 +49,28 @@ class TimerScreen(Container):
         margin: 1 0;
     }
     #btn-start {
-        background: #E8735A;
+        background: #bd93f9;
         min-width: 20;
     }
     #btn-stop {
-        background: #FF453A;
+        background: #ff5555;
         min-width: 20;
     }
     #timer-display {
         width: 100%;
         height: 3;
-        border: solid #48484A;
-        background: #2C2C2E;
+        border: solid #6272a4;
+        background: #44475a;
         padding: 0 2;
-        color: #FFFFFF;
+        color: #f8f8f2;
         margin-top: 1;
     }
     #timer-clock {
-        color: #E8735A;
+        color: #8be9fd;
         text-style: bold;
     }
     #timer-info {
-        color: #A1A1A6;
+        color: #6272a4;
     }
     """
 
@@ -166,7 +166,7 @@ class TimerScreen(Container):
         btn_stop = self.query_one("#btn-stop", Button)
 
         if session is None:
-            display.update("[#A1A1A6]No timer running[/]")
+            display.update("[#6272a4]No timer running[/]")
             btn_start.display = True
             btn_stop.display = False
             return
@@ -177,7 +177,7 @@ class TimerScreen(Container):
         task = queries.get_task(conn, session.task_id)
         category = queries.get_category(conn, session.category_id)
         if task is None or category is None:
-            display.update("[#A1A1A6]No timer running[/]")
+            display.update("[#6272a4]No timer running[/]")
             return
 
         project = queries.get_project(conn, task.project_id)
@@ -188,6 +188,6 @@ class TimerScreen(Container):
         clock = format_duration(elapsed)
 
         display.update(
-            f"[#A1A1A6]{project_name} | {task.name} | {category.name}[/]  "
-            f"[bold #E8735A]{clock}[/]  [#30D158][Running][/]"
+            f"[#6272a4]{project_name} | {task.name} | {category.name}[/]  "
+            f"[bold #8be9fd]{clock}[/]  [#50fa7b][Running][/]"
         )

@@ -19,35 +19,35 @@ class DailyReportScreen(Container):
 
     DEFAULT_CSS = """
     DailyReportScreen {
-        background: #1C1C1E;
+        background: #282a36;
         padding: 1 2;
     }
     #title {
         text-style: bold;
-        color: #FFFFFF;
+        color: #f8f8f2;
         width: 100%;
         margin-bottom: 1;
     }
     #nav-hint {
-        color: #A1A1A6;
+        color: #6272a4;
         margin-bottom: 1;
     }
     DataTable {
         height: 1fr;
-        background: #2C2C2E;
-        border: solid #48484A;
+        background: #44475a;
+        border: solid #6272a4;
     }
     #summary {
         height: auto;
         max-height: 15;
-        color: #A1A1A6;
+        color: #f8f8f2;
         margin-top: 1;
         padding: 1;
-        background: #2C2C2E;
-        border: solid #48484A;
+        background: #44475a;
+        border: solid #6272a4;
     }
     #entry-hints {
-        color: #A1A1A6;
+        color: #6272a4;
         margin-top: 1;
     }
     """
@@ -122,12 +122,12 @@ class DailyReportScreen(Container):
 
         lines = []
         if project_totals:
-            lines.append("[bold #FFFFFF]Totals by Project:[/]")
+            lines.append("[bold #bd93f9]Totals by Project:[/]")
             for name, secs in project_totals:
                 lines.append(f"  {name}: {format_duration(secs)}")
         if category_totals:
             lines.append("")
-            lines.append("[bold #FFFFFF]Totals by Category:[/]")
+            lines.append("[bold #bd93f9]Totals by Category:[/]")
             for name, secs in category_totals:
                 lines.append(f"  {name}: {format_duration(secs)}")
 

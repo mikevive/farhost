@@ -16,22 +16,22 @@ class CategoriesScreen(Container):
 
     DEFAULT_CSS = """
     CategoriesScreen {
-        background: #1C1C1E;
+        background: #282a36;
         padding: 1 2;
     }
     #title {
         text-style: bold;
-        color: #FFFFFF;
+        color: #f8f8f2;
         width: 100%;
         margin-bottom: 1;
     }
     DataTable {
         height: 1fr;
-        background: #2C2C2E;
-        border: solid #48484A;
+        background: #44475a;
+        border: solid #6272a4;
     }
     #hints {
-        color: #A1A1A6;
+        color: #6272a4;
         margin-top: 1;
     }
     """

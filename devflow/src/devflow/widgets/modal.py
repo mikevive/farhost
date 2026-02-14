@@ -91,14 +91,14 @@ class ConfirmModal(ModalScreen[bool]):
         width: 50;
         height: auto;
         max-height: 12;
-        background: #2C2C2E;
-        border: solid #48484A;
+        background: #44475a;
+        border: solid #6272a4;
         padding: 1 2;
     }
     ConfirmModal Static {
         width: 100%;
         margin-bottom: 1;
-        color: #FFFFFF;
+        color: #f8f8f2;
     }
     ConfirmModal Horizontal {
         width: 100%;
@@ -109,10 +109,10 @@ class ConfirmModal(ModalScreen[bool]):
         margin: 0 1;
     }
     ConfirmModal #btn-confirm {
-        background: #E8735A;
+        background: #bd93f9;
     }
     ConfirmModal #btn-confirm.danger {
-        background: #FF453A;
+        background: #ff5555;
     }
     """
 

@@ -21,7 +21,7 @@ class DevFlowApp(App):
 
     CSS = """
     Screen {
-        background: #1C1C1E;
+        background: #282a36;
     }
 
     #main-content {

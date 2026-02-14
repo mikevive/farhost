@@ -30,7 +30,7 @@ class CommandBar(Widget):
     CommandBar {
         height: 3;
         dock: bottom;
-        background: #1C1C1E;
+        background: #282a36;
     }
     CommandBar Horizontal {
         height: 1;
@@ -38,7 +38,7 @@ class CommandBar(Widget):
     }
     CommandBar #nav-hints {
         width: 100%;
-        color: #A1A1A6;
+        color: #6272a4;
         padding: 0 1;
     }
     CommandBar #command-input {
@@ -71,7 +71,7 @@ class CommandBar(Widget):
         parts = []
         for label, shortcut, key in screens:
             if key == self._active_screen:
-                parts.append(f"[bold #E8735A]{shortcut}[/]")
+                parts.append(f"[bold #bd93f9]{shortcut}[/]")
             else:
                 parts.append(f"{label} ({shortcut})")
         return " | ".join(parts)

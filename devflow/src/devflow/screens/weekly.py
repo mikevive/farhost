@@ -18,33 +18,33 @@ class WeeklyReportScreen(Container):
 
     DEFAULT_CSS = """
     WeeklyReportScreen {
-        background: #1C1C1E;
+        background: #282a36;
         padding: 1 2;
     }
     #title {
         text-style: bold;
-        color: #FFFFFF;
+        color: #f8f8f2;
         width: 100%;
         margin-bottom: 1;
     }
     #nav-hint {
-        color: #A1A1A6;
+        color: #6272a4;
         margin-bottom: 1;
     }
     #chart {
         height: auto;
-        color: #FFFFFF;
+        color: #f8f8f2;
         padding: 1;
-        background: #2C2C2E;
-        border: solid #48484A;
+        background: #44475a;
+        border: solid #6272a4;
         margin-bottom: 1;
     }
     #breakdown {
         height: auto;
-        color: #A1A1A6;
+        color: #f8f8f2;
         padding: 1;
-        background: #2C2C2E;
-        border: solid #48484A;
+        background: #44475a;
+        border: solid #6272a4;
     }
     """
 
@@ -104,7 +104,7 @@ class WeeklyReportScreen(Container):
             bar = generate_bar(secs, max_seconds) if secs > 0 else ""
             hours_label = f" ({format_hours(secs)})" if secs > 0 else ""
             chart_lines.append(
-                f"  {day_name} ({day_date.day:2d}): [#E8735A]{bar}[/]{hours_label}"
+                f"  {day_name} ({day_date.day:2d}): [#ff79c6]{bar}[/]{hours_label}"
             )
 
         chart_lines.append("")
@@ -118,12 +118,12 @@ class WeeklyReportScreen(Container):
 
         breakdown_lines = []
         if project_totals:
-            breakdown_lines.append("[bold #FFFFFF]Breakdown by Project:[/]")
+            breakdown_lines.append("[bold #bd93f9]Breakdown by Project:[/]")
             for name, secs in project_totals:
                 breakdown_lines.append(f"  {name}: {format_hours(secs)}")
         if category_totals:
             breakdown_lines.append("")
-            breakdown_lines.append("[bold #FFFFFF]Breakdown by Category:[/]")
+            breakdown_lines.append("[bold #bd93f9]Breakdown by Category:[/]")
             for name, secs in category_totals:
                 breakdown_lines.append(f"  {name}: {format_hours(secs)}")
 
