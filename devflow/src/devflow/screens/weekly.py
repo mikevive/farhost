@@ -58,7 +58,7 @@ class WeeklyReportScreen(Container):
     BINDINGS = [
         Binding("h,left", "prev_week", "Previous week", show=False),
         Binding("l,right", "next_week", "Next week", show=False),
-        Binding("s", "toggle_view", "Toggle Breakdown", show=False),
+        Binding("v", "cycle_view", "Cycle View", show=False),
     ]
 
     def __init__(self) -> None:
@@ -66,14 +66,15 @@ class WeeklyReportScreen(Container):
         today = date.today()
         # ISO week: find Monday of current week
         self._week_start = today - timedelta(days=today.weekday())
-        self._show_breakdown = False
+        # 0: Chart, 1: Projects, 2: Categories
+        self._view_mode = 0
 
     def compose(self) -> ComposeResult:
         yield Static("", id="title")
         yield Static("◄ h  Previous week  |  Next week  l ►", id="nav-hint")
         yield Static("", id="chart")
         yield Static("", id="breakdown")
-        yield Static("(s) view breakdown", id="footer-hints")
+        yield Static("(v) change view", id="footer-hints")
 
     def on_mount(self) -> None:
         self._refresh()
@@ -89,7 +90,9 @@ class WeeklyReportScreen(Container):
         # Title
         start_fmt = self._week_start.strftime("%b %d")
         end_fmt = (self._week_start + timedelta(days=6)).strftime("%b %d")
-        view_label = "Breakdown" if self._show_breakdown else "Chart"
+        
+        modes = ["Chart", "Projects", "Categories"]
+        view_label = modes[self._view_mode]
         self.query_one("#title", Static).update(
             f"DevFlow - Weekly {view_label} (Week {iso.week}: {start_fmt} - {end_fmt})"
         )
@@ -99,23 +102,20 @@ class WeeklyReportScreen(Container):
         breakdown = self.query_one("#breakdown", Static)
         hints = self.query_one("#footer-hints", Static)
 
-        if self._show_breakdown:
-            chart.display = False
-            breakdown.display = True
-            hints.update("(s) view chart")
-        else:
+        if self._view_mode == 0:
             chart.display = True
             breakdown.display = False
-            hints.update("(s) view breakdown")
+        else:
+            chart.display = False
+            breakdown.display = True
 
         # Query data
         week_start_str = f"{self._week_start.isoformat()} 00:00:00"
         week_end_str = f"{week_end.isoformat()} 00:00:00"
 
+        # Build Chart
         day_totals = queries.weekly_totals_by_day(conn, week_start_str, week_end_str)
         day_map = dict(day_totals)
-
-        # Build bar chart
         day_names = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
         max_seconds = max(day_map.values()) if day_map else 0
         total_seconds = sum(day_map.values()) if day_map else 0
@@ -125,29 +125,24 @@ class WeeklyReportScreen(Container):
             day_date = self._week_start + timedelta(days=i)
             day_str = day_date.isoformat()
             secs = day_map.get(day_str, 0)
-
             bar = generate_bar(secs, max_seconds) if secs > 0 else ""
             hours_label = f" ({format_hours(secs)})" if secs > 0 else ""
             chart_lines.append(
                 f"  {day_name} ({day_date.day:2d}): [#ff79c6]{bar}[/]{hours_label}"
             )
-
         chart_lines.append("")
         chart_lines.append(f"  [bold]Total Hours: {format_hours(total_seconds)}[/]")
-
         chart.update("\n".join(chart_lines))
 
         # Breakdown
-        project_totals = queries.weekly_totals_by_project(conn, week_start_str, week_end_str)
-        category_totals = queries.weekly_totals_by_category(conn, week_start_str, week_end_str)
-
         breakdown_lines = []
-        if project_totals:
+        if self._view_mode == 1:
+            project_totals = queries.weekly_totals_by_project(conn, week_start_str, week_end_str)
             breakdown_lines.append("[bold #bd93f9]Breakdown by Project:[/]")
             for name, secs in project_totals:
                 breakdown_lines.append(f"  {name}: {format_hours(secs)}")
-        if category_totals:
-            breakdown_lines.append("")
+        elif self._view_mode == 2:
+            category_totals = queries.weekly_totals_by_category(conn, week_start_str, week_end_str)
             breakdown_lines.append("[bold #bd93f9]Breakdown by Category:[/]")
             for name, secs in category_totals:
                 breakdown_lines.append(f"  {name}: {format_hours(secs)}")
@@ -164,6 +159,6 @@ class WeeklyReportScreen(Container):
         self._week_start += timedelta(weeks=1)
         self._refresh()
 
-    def action_toggle_view(self) -> None:
-        self._show_breakdown = not self._show_breakdown
+    def action_cycle_view(self) -> None:
+        self._view_mode = (self._view_mode + 1) % 3
         self._refresh()

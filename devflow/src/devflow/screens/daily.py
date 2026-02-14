@@ -57,20 +57,21 @@ class DailyReportScreen(Container):
         Binding("h,left", "prev_day", "Previous day", show=False),
         Binding("l,right", "next_day", "Next day", show=False),
         Binding("d", "delete_entry", "Delete entry", show=False),
-        Binding("s", "toggle_view", "Toggle Summary", show=False),
+        Binding("v", "cycle_view", "Cycle View", show=False),
     ]
 
     def __init__(self) -> None:
         super().__init__()
         self._current_date = date.today()
-        self._show_summary = False
+        # 0: Log, 1: Projects, 2: Categories
+        self._view_mode = 0
 
     def compose(self) -> ComposeResult:
         yield Static("", id="title")
         yield Static("◄ h  Previous day  |  Next day  l ►", id="nav-hint")
         yield DataTable(id="daily-table")
         yield Static("", id="summary")
-        yield Static("(d) delete entry | (s) view summary", id="footer-hints")
+        yield Static("(d) delete entry | (v) change view", id="footer-hints")
 
     def on_mount(self) -> None:
         table = self.query_one("#daily-table", DataTable)
@@ -92,7 +93,8 @@ class DailyReportScreen(Container):
         else:
             day_label = self._current_date.strftime("%a")
         
-        view_label = "Summary" if self._show_summary else "Log"
+        modes = ["Log", "Projects", "Categories"]
+        view_label = modes[self._view_mode]
         self.query_one("#title", Static).update(
             f"DevFlow - Daily {view_label} ({date_str} {day_label})"
         )
@@ -102,16 +104,16 @@ class DailyReportScreen(Container):
         summary = self.query_one("#summary", Static)
         hints = self.query_one("#footer-hints", Static)
 
-        if self._show_summary:
-            table.display = False
-            summary.display = True
-            hints.update("(s) view log")
-        else:
+        if self._view_mode == 0:
             table.display = True
             summary.display = False
-            hints.update("(d) delete entry | (s) view summary")
+            hints.update("(d) delete entry | (v) change view")
+        else:
+            table.display = False
+            summary.display = True
+            hints.update("(v) change view")
 
-        # Entries table
+        # Entries table (refresh data even if hidden)
         table.clear()
         entries = queries.list_time_entries_for_date(conn, date_str)
         for e in entries:
@@ -133,17 +135,15 @@ class DailyReportScreen(Container):
                 key=str(e.id),
             )
 
-        # Summary
-        project_totals = queries.daily_totals_by_project(conn, date_str)
-        category_totals = queries.daily_totals_by_category(conn, date_str)
-
+        # Summary data
         lines = []
-        if project_totals:
+        if self._view_mode == 1:
+            project_totals = queries.daily_totals_by_project(conn, date_str)
             lines.append("[bold #bd93f9]Totals by Project:[/]")
             for name, secs in project_totals:
                 lines.append(f"  {name}: {format_duration(secs)}")
-        if category_totals:
-            lines.append("")
+        elif self._view_mode == 2:
+            category_totals = queries.daily_totals_by_category(conn, date_str)
             lines.append("[bold #bd93f9]Totals by Category:[/]")
             for name, secs in category_totals:
                 lines.append(f"  {name}: {format_duration(secs)}")
@@ -158,8 +158,8 @@ class DailyReportScreen(Container):
         self._current_date += timedelta(days=1)
         self._refresh()
 
-    def action_toggle_view(self) -> None:
-        self._show_summary = not self._show_summary
+    def action_cycle_view(self) -> None:
+        self._view_mode = (self._view_mode + 1) % 3
         self._refresh()
 
     def action_delete_entry(self) -> None:
