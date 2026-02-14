@@ -6,7 +6,7 @@ from datetime import datetime
 
 from textual.app import ComposeResult
 from textual.containers import Vertical, Horizontal, Container
-from textual.widgets import Button, Label, Select, Static
+from textual.widgets import Button, Label, Select, Static, Digits
 from textual.timer import Timer
 
 from devflow.db import queries
@@ -60,19 +60,31 @@ class TimerScreen(Container):
     }
     #timer-display {
         width: 100%;
-        height: 3;
-        border: solid #6272a4;
-        background: #44475a;
-        padding: 0 2;
-        color: #f8f8f2;
-        margin-top: 1;
-    }
-    #timer-clock {
-        color: #8be9fd;
-        text-style: bold;
+        height: auto;
+        align: center middle;
+        margin: 1 0;
+        display: none;
     }
     #timer-info {
+        width: 100%;
+        text-align: center;
         color: #6272a4;
+    }
+    #timer-clock-container {
+        width: 100%;
+        height: auto;
+        align: center middle;
+    }
+    #timer-clock {
+        width: auto;
+        color: #8be9fd;
+        text-style: bold;
+        margin: 1 0;
+    }
+    #timer-status {
+        width: 100%;
+        text-align: center;
+        color: #50fa7b;
     }
     """
 
@@ -84,19 +96,24 @@ class TimerScreen(Container):
     def compose(self) -> ComposeResult:
         yield Static("DevFlow", id="title")
         with Vertical():
-            with Horizontal(classes="selector-row"):
-                yield Label("Project:", classes="selector-label")
-                yield Select([], id="sel-project", prompt="Select project...")
-            with Horizontal(classes="selector-row"):
-                yield Label("Task:", classes="selector-label")
-                yield Select([], id="sel-task", prompt="Select task...")
-            with Horizontal(classes="selector-row"):
-                yield Label("Category:", classes="selector-label")
-                yield Select([], id="sel-category", prompt="Select category...")
+            with Vertical(id="selectors"):
+                with Horizontal(classes="selector-row"):
+                    yield Label("Project:", classes="selector-label")
+                    yield Select([], id="sel-project", prompt="Select project...")
+                with Horizontal(classes="selector-row"):
+                    yield Label("Task:", classes="selector-label")
+                    yield Select([], id="sel-task", prompt="Select task...")
+                with Horizontal(classes="selector-row"):
+                    yield Label("Category:", classes="selector-label")
+                    yield Select([], id="sel-category", prompt="Select category...")
+            with Vertical(id="timer-display"):
+                yield Static("", id="timer-info")
+                with Horizontal(id="timer-clock-container"):
+                    yield Digits("00:00:00", id="timer-clock")
+                yield Static("[Running]", id="timer-status")
             with Horizontal(id="btn-row"):
                 yield Button("START TIMER", id="btn-start")
                 yield Button("STOP TIMER", id="btn-stop")
-            yield Static("", id="timer-display")
 
     def on_mount(self) -> None:
         self._load_selectors()
@@ -162,24 +179,28 @@ class TimerScreen(Container):
         if conn is None:
             return
 
-        display = self.query_one("#timer-display", Static)
+        display_container = self.query_one("#timer-display", Vertical)
         session = queries.get_active_session(conn)
         btn_start = self.query_one("#btn-start", Button)
         btn_stop = self.query_one("#btn-stop", Button)
+        selectors = self.query_one("#selectors", Vertical)
 
         if session is None:
-            display.update("[#6272a4]No timer running[/]")
+            display_container.display = False
             btn_start.display = True
             btn_stop.display = False
+            selectors.display = True
             return
 
+        display_container.display = True
         btn_start.display = False
         btn_stop.display = True
+        selectors.display = False
 
         task = queries.get_task(conn, session.task_id)
         category = queries.get_category(conn, session.category_id)
         if task is None or category is None:
-            display.update("[#6272a4]No timer running[/]")
+            display_container.display = False
             return
 
         project = queries.get_project(conn, task.project_id)
@@ -187,9 +208,7 @@ class TimerScreen(Container):
 
         start = datetime.strptime(session.start_time, "%Y-%m-%d %H:%M:%S")
         elapsed = int((datetime.now() - start).total_seconds())
-        clock = format_duration(elapsed)
+        clock_str = format_duration(elapsed)
 
-        display.update(
-            f"[#6272a4]{project_name} | {task.name} | {category.name}[/]  "
-            f"[bold #8be9fd]{clock}[/]  [#50fa7b][Running][/]"
-        )
+        self.query_one("#timer-info", Static).update(f"{project_name} | {task.name} | {category.name}")
+        self.query_one("#timer-clock", Digits).update(clock_str)
