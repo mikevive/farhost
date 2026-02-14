@@ -17,6 +17,8 @@ from devflow.widgets.bar_chart import format_duration
 class TimerScreen(Container):
     """Main timer view with selection controls and live elapsed display."""
 
+    can_focus = True
+
     DEFAULT_CSS = """
     TimerScreen {
         background: #282a36;

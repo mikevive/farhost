@@ -16,6 +16,8 @@ from devflow.widgets.bar_chart import format_hours, generate_bar
 class WeeklyReportScreen(Container):
     """Weekly report: ASCII bar charts per day, project/category breakdowns."""
 
+    can_focus = True
+
     DEFAULT_CSS = """
     WeeklyReportScreen {
         background: #282a36;

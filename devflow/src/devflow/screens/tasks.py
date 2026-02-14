@@ -14,6 +14,8 @@ from devflow.widgets.modal import ConfirmModal, InputModal
 class TasksScreen(Container):
     """Manage tasks for a specific project."""
 
+    can_focus = True
+
     DEFAULT_CSS = """
     TasksScreen {
         background: #282a36;

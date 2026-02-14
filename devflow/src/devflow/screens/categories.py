@@ -14,6 +14,8 @@ from devflow.widgets.modal import ConfirmModal, InputModal
 class CategoriesScreen(Container):
     """Manage categories: list, add, edit, archive, restore."""
 
+    can_focus = True
+
     DEFAULT_CSS = """
     CategoriesScreen {
         background: #282a36;

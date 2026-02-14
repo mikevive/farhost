@@ -98,7 +98,10 @@ class DevFlowApp(App):
         content_area = self.query_one("#main-content")
         for child in content_area.children:
             child.remove()
-        content_area.mount(screen_class(**kwargs))
+        
+        new_screen = screen_class(**kwargs)
+        content_area.mount(new_screen)
+        new_screen.focus()
 
         # Don't change the footer's active command for the tasks screen
         if self._command_bar and screen_name != "tasks":

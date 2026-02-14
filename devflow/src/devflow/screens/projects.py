@@ -14,6 +14,8 @@ from devflow.widgets.modal import ConfirmModal, InputModal
 class ProjectsScreen(Container):
     """Manage projects: list, add, edit, archive, restore."""
 
+    can_focus = True
+
     DEFAULT_CSS = """
     ProjectsScreen {
         background: #282a36;

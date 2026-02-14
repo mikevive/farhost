@@ -17,6 +17,8 @@ from devflow.widgets.modal import ConfirmModal
 class DailyReportScreen(Container):
     """Daily report: chronological log, totals by project/category, date navigation."""
 
+    can_focus = True
+
     DEFAULT_CSS = """
     DailyReportScreen {
         background: #282a36;
